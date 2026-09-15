@@ -2,31 +2,41 @@
    TRADING COMPANY — CENTRAL SITE CONFIGURATION
    This is the ONLY file you need to edit to change commercial details.
 
-   1. PAYMENT LINKS — paste each Razorpay Payment Link / Checkout URL below.
-      Until a real URL is set, the BUY NOW button falls back to "#" and does
-      nothing. Replace the empty string, save, done.
-   2. PRICES — change `price` (display string, e.g. "₹399").
-   3. SUPPORT EMAIL — `supportEmail` below; used in footers and contact copy.
-   4. TITLES / SUBTITLES / COVER IMAGES — these live in each publication's own
-      page file (Publication-01-*.dc.html …). Cover images are drop-in slots:
-      drag an image onto the cover placeholder in the editor.
+   Payments run through Razorpay Checkout, driven by three Supabase Edge
+   Functions (create-order, verify-payment, razorpay-webhook). Prices are set
+   SERVER-SIDE in supabase/functions/_shared/catalog.ts — the browser only ever
+   sends a publication id, so a tampered page cannot change what it is charged.
+   The `prices` below are display strings only; keep them in step with the
+   catalog when you change a price.
 
-   NOTE: after a successful Razorpay payment, set the Razorpay "callback / success
-   URL" to the Thank You page so the purchase journey closes correctly.
+   1. SUPABASE — url + anon key of the project holding the Edge Functions.
+      The anon key is a public, publishable key; it is safe in this file.
+      The Razorpay SECRET key lives only in Supabase Edge Function secrets.
+   2. PRICES — display strings (e.g. "₹399"). Also update catalog.ts.
+   3. SUPPORT EMAIL — `supportEmail`; used in footers and contact copy.
+   4. TITLES / SUBTITLES / COVER IMAGES — these live in each publication's own
+      page file (Publication-01-*.dc.html …).
    ───────────────────────────────────────────────────────────────────────────── */
 
 export const supportEmail = 'support@tradingcompany.in';
 
 export const thankYouUrl = 'ThankYou.dc.html';
 
-export const payments = {
-  riskFrameworkPaymentUrl: '',
-  tradersMindPaymentUrl: '',
-  positionSizingPaymentUrl: '',
-  tradingSystemPaymentUrl: '',
-  reviewPaymentUrl: '',
-  // All five publications as one purchase (₹999)
-  bundlePaymentUrl: ''
+export const supabase = {
+  url: 'https://myjywxzxhccedkzlftbh.supabase.co',
+  anonKey:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15anl3eHp4aGNjZWRremxmdGJoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk0NjQ3OTYsImV4cCI6MjEwNTA0MDc5Nn0.syR90tzKR5mt_0S0hW_D8zoBjT0CISd-zSpmoQm-Tc4'
+};
+
+/* Publication ids — these must match the keys in
+   supabase/functions/_shared/catalog.ts exactly. */
+export const publications = {
+  riskFramework:  'risk-framework',
+  tradersMind:    'traders-mind',
+  positionSizing: 'position-sizing',
+  tradingSystem:  'trading-system',
+  review:         'review',
+  bundle:         'bundle'
 };
 
 export const prices = {

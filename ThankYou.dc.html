@@ -116,6 +116,11 @@
             </div>
             <p style="margin:0;font-size:15px;line-height:1.55;max-width:60ch;color:rgba(0,0,0,0.7);text-wrap:pretty">{{ downloadNote }}</p>
             <p style="margin:0;font-size:15px;line-height:1.55;max-width:60ch;color:rgba(0,0,0,0.7)">A copy of your purchase details may be sent to your email.</p>
+            <div style="display:{{ orderRefDisplay }};flex-direction:column;gap:6px;padding-top:4px">
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(0,0,0,0.7)">Order reference</span>
+              <code style="font-size:14px;letter-spacing:0.04em;word-break:break-all;color:rgba(0,0,0,0.85)">{{ orderRef }}</code>
+              <span style="font-size:13.5px;line-height:1.5;color:rgba(0,0,0,0.6);max-width:60ch">Quote this if you need to contact support about this purchase.</span>
+            </div>
           </div>
         </div>
       </section>
@@ -198,7 +203,7 @@ const BONUS_ROUTE = '';
 const SUPPORT_EMAIL = 'support@tradingcompany.in';
 
 class Component extends DCLogic {
-  state = { w: 1200, menuOpen: false, pct: 0 };
+  state = { w: 1200, menuOpen: false, pct: 0, orderRef: '' };
 
   componentDidMount() {
     this.sync = () => {
@@ -215,6 +220,14 @@ class Component extends DCLogic {
     this.onScroll();
     window.addEventListener('resize', this.sync);
     window.addEventListener('scroll', this.onScroll, { passive: true });
+
+    // checkout.js redirects here as ThankYou.dc.html?order_id=…&publication=…
+    try {
+      const q = new URLSearchParams(window.location.search);
+      const ref = (q.get('order_id') || '').trim();
+      // a uuid and nothing else — never echo arbitrary text from the URL
+      if (/^[0-9a-fA-F-]{36}$/.test(ref)) this.setState({ orderRef: ref });
+    } catch (e) { /* no query string is fine */ }
   }
 
   componentWillUnmount() {
@@ -223,7 +236,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { w, menuOpen, pct } = this.state;
+    const { w, menuOpen, pct, orderRef } = this.state;
     const narrow = w < 900;
     const mid = w < 1240;
     const spine = w >= 1240;
@@ -258,8 +271,13 @@ class Component extends DCLogic {
       practiceCols: narrow ? '1fr' : (mid ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))'),
       setCols: narrow ? '1fr' : 'minmax(0,1.15fr) minmax(0,0.85fr)',
       btnCols: narrow ? '1fr' : 'repeat(2,minmax(0,1fr))',
-      downloadUrl: DOWNLOAD_ROUTE || ('mailto:' + SUPPORT_EMAIL + '?subject=Publication%20download'),
-      bonusUrl: BONUS_ROUTE || ('mailto:' + SUPPORT_EMAIL + '?subject=Chart%20theme%20templates'),
+      orderRef,
+      orderRefDisplay: orderRef ? 'flex' : 'none',
+      // carry the reference into the support mailto so buyers never have to retype it
+      downloadUrl: DOWNLOAD_ROUTE || ('mailto:' + SUPPORT_EMAIL + '?subject=' +
+        encodeURIComponent('Publication download' + (orderRef ? ' — order ' + orderRef : ''))),
+      bonusUrl: BONUS_ROUTE || ('mailto:' + SUPPORT_EMAIL + '?subject=' +
+        encodeURIComponent('Chart theme templates' + (orderRef ? ' — order ' + orderRef : ''))),
       downloadNote: DOWNLOAD_ROUTE
         ? 'Both links are valid for a limited time and are tied to this purchase.'
         : 'Secure download delivery is not yet connected. Until it is, these buttons email support and we will send your files directly.'

@@ -143,7 +143,7 @@
               <p style="margin:0;font-size:clamp(16px,1.6vw,20px);line-height:1.45;max-width:42ch;color:rgba(0,0,0,0.78);text-wrap:pretty">Structure around market decisions, execution and consistency.</p>
               <div style="width:100%;display:flex;flex-direction:{{ ctaDir }};flex-wrap:wrap;align-items:{{ ctaAlign }};gap:{{ ctaGap }};margin-top:4px;padding-top:clamp(16px,2vw,24px);border-top:1px solid rgba(0,0,0,0.35)">
                 <span style="font-family:var(--font-heading);font-weight:800;font-size:clamp(28px,3vw,42px);letter-spacing:-0.025em">₹399</span>
-                <a href="{{ payUrl }}" class="tc-silver" style="width:{{ ctaWidth }};box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:19px 28px;color:#FFFFFF;text-decoration:none;display:block">Buy now — ₹399</a>
+                <a href="#buy" onClick="{{ buyNow }}" class="tc-silver" style="width:{{ ctaWidth }};box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:19px 28px;color:#FFFFFF;text-decoration:none;display:block">Buy now — ₹399</a>
               </div>
               <p style="margin:0;font-size:12.5px;color:rgba(0,0,0,0.55)">Digital publication · Instant access after payment · Secure checkout via Razorpay</p>
 
@@ -385,7 +385,7 @@
           <p style="margin:0;font-size:clamp(28px,4.4vw,64px);line-height:0.98;letter-spacing:-0.04em;font-family:var(--font-heading);font-weight:800;text-transform:uppercase;color:#FFFFFF;max-width:16ch">The Trading System</p>
           <p style="margin:0;font-size:17px;line-height:1.6;max-width:48ch;color:rgba(255,255,255,0.75);text-wrap:pretty">The complete publication and the chart theme templates, available immediately after payment.</p>
           <p style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(44px,7vw,96px);line-height:0.9;letter-spacing:-0.04em;color:#FFFFFF">₹399</p>
-          <a href="{{ payUrl }}" class="tc-btn-b" style="width:{{ ctaWidth }};box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;padding:21px 32px;background:#FFFFFF;color:#000000;border:2px solid #FFFFFF;text-decoration:none;display:block">Buy now — ₹399</a>
+          <a href="#buy" onClick="{{ buyNow }}" class="tc-btn-b" style="width:{{ ctaWidth }};box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;padding:21px 32px;background:#FFFFFF;color:#000000;border:2px solid #FFFFFF;text-decoration:none;display:block">Buy now — ₹399</a>
           <p style="margin:0;font-size:12.5px;color:rgba(255,255,255,0.55)">Digital publication · Instant access after payment · Secure payment via Razorpay</p>
         </div>
       </section>
@@ -403,7 +403,7 @@
               <span style="font-size:16px;color:rgba(0,0,0,0.6);text-decoration:line-through">₹1,995</span>
               <span style="margin-left:auto;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;background:#000000;color:#FFFFFF;padding:6px 10px">Save ₹996</span>
             </div>
-            <a href="{{ bundleUrl }}" class="tc-silver" style="width:100%;box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:18px 26px;color:#FFFFFF;text-decoration:none;display:block">Buy the bundle — ₹999</a>
+            <a href="#buy" onClick="{{ buyBundle }}" class="tc-silver" style="width:100%;box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:18px 26px;color:#FFFFFF;text-decoration:none;display:block">Buy the bundle — ₹999</a>
             <p style="margin:0;font-size:13px;line-height:1.5;color:rgba(0,0,0,0.6)">Instant digital access to all five publications.</p>
           </div>
         </div>
@@ -455,18 +455,21 @@
 
   <div role="region" aria-label="Buy this publication" style="display:{{ stickyBar }};position:fixed;left:0;right:0;bottom:0;z-index:60;background:#000000;color:#FFFFFF;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px calc(12px + env(safe-area-inset-bottom, 0px));border-top:2px solid #FFFFFF">
     <span style="font-family:var(--font-heading);font-weight:800;font-size:20px;letter-spacing:-0.02em;color:#FFFFFF">₹399</span>
-    <a href="{{ payUrl }}" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:17px 26px;background:#FFFFFF;color:#000000;text-decoration:none;min-height:52px;display:flex;align-items:center">Buy now →</a>
+    <a href="#buy" onClick="{{ buyNow }}" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:17px 26px;background:#FFFFFF;color:#000000;text-decoration:none;min-height:52px;display:flex;align-items:center">Buy now →</a>
   </div>
   <div style="height:{{ stickySpacer }}"></div>
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
-/* PAYMENT LINK: read from site-config.js → payments.tradingSystemPaymentUrl
-   and payments.bundlePaymentUrl. Edit that file, not this one. */
-const PAYMENT_KEY = 'tradingSystemPaymentUrl';
+/* PAYMENTS: real Razorpay Checkout, driven by the Supabase Edge Functions in
+   supabase/functions (create-order → checkout popup → verify-payment).
+   The price is decided SERVER-SIDE from this id — see
+   supabase/functions/_shared/catalog.ts. Nothing here handles money directly. */
+const PUBLICATION_ID = 'trading-system';
+const BUNDLE_ID = 'bundle';
 
 class Component extends DCLogic {
-  state = { w: 1200, menuOpen: false, pct: 0, scrolled: false, payUrl: '', bundleUrl: '' };
+  state = { w: 1200, menuOpen: false, pct: 0, scrolled: false };
 
   componentDidMount() {
     this.sync = () => {
@@ -484,12 +487,15 @@ class Component extends DCLogic {
     this.onScroll();
     window.addEventListener('resize', this.sync);
     window.addEventListener('scroll', this.onScroll, { passive: true });
-    import('./site-config.js')
-      .then(cfg => this.setState({
-        payUrl: (cfg.payments || {})[PAYMENT_KEY] || '',
-        bundleUrl: (cfg.payments || {}).bundlePaymentUrl || ''
-      }))
-      .catch(() => {});
+    // warm the checkout module so the first Buy click opens without a wait
+    import('./checkout.js').then(m => { this.checkout = m; }).catch(() => {});
+  }
+
+  buy(publicationId) {
+    if (this.checkout) { this.checkout.startCheckout(publicationId); return; }
+    import('./checkout.js')
+      .then(m => { this.checkout = m; m.startCheckout(publicationId); })
+      .catch(() => window.alert('Checkout could not load. Please refresh the page and try again.'));
   }
 
   componentWillUnmount() {
@@ -498,7 +504,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { w, menuOpen, pct, scrolled, payUrl, bundleUrl } = this.state;
+    const { w, menuOpen, pct, scrolled } = this.state;
     const narrow = w < 900;
     const mid = w < 1240;
     const spine = w >= 1240;
@@ -546,8 +552,8 @@ class Component extends DCLogic {
       receiveCols: narrow ? '1fr' : 'clamp(120px,14vw,190px) minmax(0,1fr)',
       stickyBar: narrow && scrolled ? 'flex' : 'none',
       stickySpacer: narrow ? '68px' : '0px',
-      payUrl: payUrl || '#buy',
-      bundleUrl: bundleUrl || '#buy'
+      buyNow: (e) => { if (e && e.preventDefault) e.preventDefault(); this.buy(PUBLICATION_ID); },
+      buyBundle: (e) => { if (e && e.preventDefault) e.preventDefault(); this.buy(BUNDLE_ID); }
     };
   }
 }

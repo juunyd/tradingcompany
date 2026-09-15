@@ -187,7 +187,7 @@
             <span style="font-size:17px;color:rgba(0,0,0,0.45);text-decoration:line-through">₹1,995</span>
             <span style="margin-left:auto;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;background:#000000;color:#FFFFFF;padding:6px 10px">Save ₹996</span>
           </div>
-          <a href="{{ bundleUrl }}" class="btn btn-primary tc-silver" style="width:100%;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;padding:20px 28px;color:#FFFFFF;text-decoration:none;justify-content:flex-start">Buy the bundle — ₹999</a>
+          <a href="#" onClick="{{ buyBundle }}" class="btn btn-primary tc-silver" style="width:100%;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;padding:20px 28px;color:#FFFFFF;text-decoration:none;justify-content:flex-start">Buy the bundle — ₹999</a>
           <p style="margin:0;font-size:13px;line-height:1.5;color:rgba(0,0,0,0.6)">Instant digital access to all five publications.</p>
         </div>
       </div>
@@ -245,7 +245,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{}">
 class Component extends DCLogic {
-  state = { narrow: false, menuOpen: false, bundleUrl: '', progress: 0 };
+  state = { narrow: false, menuOpen: false, progress: 0 };
 
   componentDidMount() {
     this.sync = () => {
@@ -254,12 +254,21 @@ class Component extends DCLogic {
     };
     this.sync();
     window.addEventListener('resize', this.sync);
-    import('./site-config.js')
-      .then(cfg => this.setState({ bundleUrl: (cfg.payments || {}).bundlePaymentUrl || '' }))
-      .catch(() => {});
+    // warm the checkout module so the first Buy click opens without a wait
+    import('./checkout.js').then(m => { this.checkout = m; }).catch(() => {});
   }
 
   componentWillUnmount() { window.removeEventListener('resize', this.sync); }
+
+  // The bundle is priced server-side like every other item — see
+  // supabase/functions/_shared/catalog.ts.
+  buyBundle = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (this.checkout) { this.checkout.startCheckout('bundle'); return; }
+    import('./checkout.js')
+      .then(m => { this.checkout = m; m.startCheckout('bundle'); })
+      .catch(() => window.alert('Checkout could not load. Please refresh the page and try again.'));
+  };
 
   railRef = (el) => { this.rail = el; };
 
@@ -288,13 +297,13 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { narrow, menuOpen, bundleUrl } = this.state;
+    const { narrow, menuOpen } = this.state;
     return {
       desktopNav: narrow ? 'none' : 'flex',
       burgerDisplay: narrow ? 'flex' : 'none',
       mobileNav: narrow && menuOpen ? 'flex' : 'none',
       menuOpenStr: menuOpen ? 'true' : 'false',
-      bundleUrl: bundleUrl || '#',
+      buyBundle: this.buyBundle,
       bundleCols: narrow ? '1fr' : 'minmax(0,1.1fr) minmax(0,0.9fr)',
       railRef: this.railRef,
       onRail: this.onRail,
