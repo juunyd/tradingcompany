@@ -54,6 +54,7 @@ Checkout, backed by three Supabase Edge Functions in `supabase/functions/`:
 | `create-order` | the browser, on Buy | creates a Razorpay order, inserts an `orders` row as `created` |
 | `verify-payment` | the browser, after checkout | verifies the signature, marks the row `paid` / `failed` |
 | `razorpay-webhook` | Razorpay, server-to-server | the backup confirmation, marks the same row |
+| `get-download-link` | the browser, on Thank You load | confirms the order is `paid` before the page shows anything (see §6) |
 
 **Prices live server-side** in `supabase/functions/_shared/catalog.ts`. The
 browser only ever sends a publication id, so a tampered page cannot change the
@@ -78,7 +79,7 @@ supabase functions deploy create-order
 To redeploy after any function change:
 
 ```bash
-supabase functions deploy create-order verify-payment razorpay-webhook
+supabase functions deploy create-order verify-payment razorpay-webhook get-download-link
 ```
 
 The buyer journey closes automatically: page → Buy → email → Razorpay popup →
@@ -89,15 +90,58 @@ The buyer journey closes automatically: page → Buy → email → Razorpay popu
 `site-config.js` → `supportEmail`, plus the `mailto:support@tradingcompany.in`
 links in each page footer and on the Contact page.
 
-## 6. Secure download delivery (important)
+## 6. Secure download delivery (in progress)
 
-`ThankYou.dc.html` → `DOWNLOAD_ROUTE` is deliberately empty. Do **not** paste a
-public PDF URL there — it would let non-buyers download the publication. Point
-it at a protected route that looks the `order_id` up in the `orders` table,
-confirms `status = 'paid'`, and issues a short-lived signed URL from private
-storage. A fourth Edge Function is the natural home for this. Until then the
-button falls back to a support mailto (with the order reference in the subject)
-so no real buyer dead-ends.
+### What is built
+
+`ThankYou.dc.html` is **gated**. On load it reads `order_id` from the URL and
+POSTs it to a fourth Edge Function, `get-download-link`, which looks the order
+up with the service_role key and answers only:
+
+| Order state | Response |
+| --- | --- |
+| `status = 'paid'` | `200 { verified: true, publication_id, publication_title, customer_email }` |
+| unpaid / unknown / malformed id | `404 { verified: false, error: 'We could not verify this order.' }` |
+
+The three failures share one wording on purpose — the page must never confirm
+whether an `order_id` exists, or it becomes a probe oracle. A network failure
+lands on the same neutral branch, because the page must not show a purchase it
+could not confirm. Only a `verified: true` answer reveals the purchase content.
+
+A private Storage bucket, `publications`, exists and is **empty**. It has no
+policies on `storage.objects`, so only the Edge Functions can reach it.
+
+### What is not built yet
+
+`DOWNLOAD_ROUTE` and `BONUS_ROUTE` in `ThankYou.dc.html` are still empty, and
+`get-download-link` returns no URLs — the PDFs do not exist yet. The buttons
+fall back to a support mailto carrying the order reference, so no real buyer
+dead-ends. Every spot that needs wiring is marked `TODO: wire to Supabase
+Storage once PDFs are uploaded`.
+
+### Finishing it, once the PDFs exist
+
+1. Upload into the private bucket, keyed by publication id:
+
+   ```bash
+   supabase storage cp ./risk-framework.pdf ss:///publications/risk-framework.pdf --experimental
+   # …and the other four, plus chart-themes.zip for the bonus
+   ```
+
+2. In `get-download-link`, on the verified branch, sign them and return the URLs:
+
+   ```ts
+   const { data } = await db.storage.from('publications')
+     .createSignedUrl(`${order.publication_id}.pdf`, 900);   // 15 minutes
+   ```
+
+   `bundle` is the one special case: it needs five signed URLs, not one.
+
+3. Redeploy: `supabase functions deploy get-download-link`.
+
+4. In `ThankYou.dc.html`, read `body.download_url` / `body.bonus_url` in
+   `verify()` into state, and return them from `renderVals()` as `downloadUrl`
+   and `bonusUrl` in place of the mailto fallback.
 
 ## 7. Contact form
 
