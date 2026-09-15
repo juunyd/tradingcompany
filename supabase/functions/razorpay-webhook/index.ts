@@ -6,6 +6,7 @@
 // dashboard when creating the webhook), NOT the API key secret.
 import { hmacHex, safeEqual } from '../_shared/razorpay.ts';
 import { adminClient } from '../_shared/db.ts';
+import { sendOrderConfirmationOnce } from '../_shared/email.ts';
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') {
@@ -73,6 +74,14 @@ Deno.serve(async (req) => {
       console.error('webhook order update failed', error);
       return new Response(JSON.stringify({ error: 'Update failed' }), { status: 500 });
     }
+  }
+
+  // This is the path that catches the buyer who closed the tab before
+  // verify-payment could run. Claimed, so whichever endpoint arrives first
+  // sends and the other is a no-op. A failure here must NOT 500: Razorpay
+  // would retry the whole event and re-settle an order that is already fine.
+  if (status === 'paid' || existing.status === 'paid') {
+    await sendOrderConfirmationOnce(db, existing.id);
   }
 
   return new Response(

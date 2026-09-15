@@ -4,6 +4,7 @@
 import { corsHeaders, json, preflight } from '../_shared/http.ts';
 import { credentials, hmacHex, safeEqual } from '../_shared/razorpay.ts';
 import { adminClient } from '../_shared/db.ts';
+import { sendOrderConfirmationOnce } from '../_shared/email.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return preflight();
@@ -33,6 +34,10 @@ Deno.serve(async (req) => {
 
     if (!existing) return json({ success: false, error: 'Unknown order' }, 404);
     if (existing.status === 'paid') {
+      // The webhook settled this one first. It may or may not have sent the
+      // receipt yet, so still try — the claim inside makes a double-send
+      // impossible.
+      await sendOrderConfirmationOnce(db, existing.id);
       return json({ success: true, order_id: existing.id, already_confirmed: true });
     }
 
@@ -53,6 +58,11 @@ Deno.serve(async (req) => {
       console.warn('signature mismatch for order', razorpay_order_id);
       return json({ success: false, error: 'Payment signature verification failed' }, 400);
     }
+
+    // Best-effort, and deliberately awaited: the runtime can freeze the
+    // isolate the moment we return, so a fire-and-forget send would be a
+    // coin toss. This never throws and caps itself at 8s.
+    await sendOrderConfirmationOnce(db, existing.id);
 
     return json({ success: true, order_id: existing.id });
   } catch (e) {
