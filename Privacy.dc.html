@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-209a40ca-926e-4959-aff6-5d88a299548b/styles.css">
+<script src="_ds/modernist-209a40ca-926e-4959-aff6-5d88a299548b/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<title>Privacy Policy | Trading Company</title>
+<meta name="description" content="How Trading Company collects, uses and protects information for its digital publications business.">
+<style>
+  :root {
+    --color-bg: #FFFFFF; --color-surface: #FFFFFF; --color-text: #000000;
+    --color-accent: #000000; --color-accent-2: #000000; --color-divider: #000000;
+    --color-accent-500: #000000; --color-accent-600: #000000; --color-accent-700: #000000;
+  }
+  body { margin: 0; background: #FFFFFF; color: #000000; -webkit-font-smoothing: antialiased; }
+  a { color: #000000; text-decoration: none; }
+  a:hover { color: #000000; }
+  ::selection { background: #000000; color: #FFFFFF; }
+  :focus-visible { outline: 2px solid #000000; outline-offset: 3px; }
+
+
+  /* the footer is a dark island on a light page — scope its ink to it */
+  footer a, footer .tc-link-u { color: #FFFFFF; }
+  footer .tc-link-u::after { background: #FFFFFF; }
+
+  .tc-num {
+    -webkit-text-stroke: 1.5px rgba(0,0,0,0.55);
+    color: transparent;
+    transition: color .5s cubic-bezier(.2,.7,.2,1), -webkit-text-stroke-color .5s ease;
+  }
+  .tc-plate:hover .tc-num { color: #000000; -webkit-text-stroke-color: #000000; }
+  .tc-plate .tc-cover { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+  .tc-plate:hover .tc-cover { transform: translateY(-6px); }
+  .tc-plate .tc-cta { transition: gap .3s ease; }
+  .tc-plate:hover .tc-cta { gap: 20px; }
+
+  .tc-link-u { position: relative; }
+  .tc-link-u::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px;
+    background: #000000; transform: scaleX(0); transform-origin: left;
+    transition: transform .3s cubic-bezier(.2,.7,.2,1);
+  }
+  .tc-link-u:hover::after { transform: scaleX(1); }
+
+  .tc-btn-w { transition: background .25s ease, color .25s ease; }
+  .tc-btn-w:hover { background: transparent !important; color: #000000 !important; }
+  .tc-btn-b { transition: background .25s ease, color .25s ease; }
+  .tc-btn-b:hover { background: #FFFFFF !important; color: #000000 !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tc-num, .tc-cover, .tc-cta, .tc-link-u::after, .tc-btn-w, .tc-btn-b { transition: none; }
+  }
+</style>
+</helmet>
+
+<div style="background:#FFFFFF;color:#000000;font-family:var(--font-body);font-size:16px;line-height:1.55;overflow-x:hidden;position:relative">
+
+  <div aria-hidden="true" style="display:{{ spineDisplay }};position:fixed;top:0;left:0;bottom:0;width:72px;border-right:1px solid rgba(0,0,0,0.25);z-index:30;flex-direction:column;align-items:center;justify-content:space-between;padding:22px 0;background:#FFFFFF;pointer-events:none">
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;writing-mode:vertical-rl">TC</span>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.28em;text-transform:uppercase;writing-mode:vertical-rl;color:rgba(0,0,0,0.6)">Trading Company — Built for Traders</span>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.16em;writing-mode:vertical-rl;color:rgba(0,0,0,0.6)">{{ progressLabel }}</span>
+  </div>
+
+  <div aria-hidden="true" style="display:{{ spineDisplay }};position:fixed;left:0;top:0;width:3px;background:#000000;z-index:31;height:{{ progressHeight }}"></div>
+  <div aria-hidden="true" style="display:{{ barDisplay }};position:fixed;left:0;top:0;height:2px;background:#000000;z-index:51;width:{{ progressWidth }}"></div>
+
+  <div style="padding-left:{{ shellPad }}">
+
+    <header style="position:sticky;top:0;z-index:40;background:#FFFFFF;border-bottom:1px solid rgba(0,0,0,0.25)">
+      <div style="max-width:1560px;margin:0 auto;padding:0 clamp(18px,3.5vw,56px);height:clamp(70px,6vw,84px);display:flex;align-items:center;justify-content:space-between;gap:20px">
+        <a href="index.html" aria-label="Trading Company — home" style="display:flex;align-items:center;flex:0 0 auto">
+          <img src="uploads/tradingcompany.png" alt="Trading Company" style="height:clamp(36px,3.6vw,46px);width:auto;display:block">
+        </a>
+        <nav aria-label="Primary" style="display:{{ desktopNav }};align-items:center;gap:clamp(20px,2.6vw,40px)">
+          <a class="tc-link-u" href="index.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase">Home</a>
+          <a class="tc-link-u" href="Library.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase">Publications</a>
+          <a class="tc-link-u" href="About.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase">About</a>
+          <a class="tc-link-u" href="Contact.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase">Contact</a>
+        </nav>
+        <button type="button" aria-label="Menu" aria-expanded="{{ menuOpenStr }}" onClick="{{ toggleMenu }}" style="display:{{ burgerDisplay }};flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;padding:0;background:transparent;border:1px solid rgba(0,0,0,0.6);cursor:pointer">
+          <span style="display:block;width:18px;height:2px;background:#000000"></span>
+          <span style="display:block;width:18px;height:2px;background:#000000"></span>
+        </button>
+      </div>
+      <nav aria-label="Primary mobile" style="display:{{ mobileNav }};flex-direction:column;border-top:1px solid rgba(0,0,0,0.25);background:#FFFFFF">
+        <a href="index.html" onClick="{{ closeMenu }}" style="padding:17px clamp(18px,3.5vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Home</a>
+        <a href="Library.dc.html" onClick="{{ closeMenu }}" style="padding:17px clamp(18px,3.5vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Publications</a>
+        <a href="About.dc.html" onClick="{{ closeMenu }}" style="padding:17px clamp(18px,3.5vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">About</a>
+        <a href="Contact.dc.html" onClick="{{ closeMenu }}" style="padding:17px clamp(18px,3.5vw,56px);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+
+      <section aria-label="Document title" style="border-bottom:1px solid rgba(0,0,0,0.25)">
+        <div style="max-width:1560px;margin:0 auto;padding:clamp(36px,5vw,88px) clamp(18px,3.5vw,56px) clamp(28px,3.5vw,56px)">
+          <p style="margin:0 0 clamp(24px,3vw,44px);font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(0,0,0,0.7)">Legal</p>
+          <h1 style="margin:0;font-weight:800;text-transform:uppercase;letter-spacing:-0.045em;line-height:0.82;font-size:clamp(42px,9.5vw,142px)">
+            <span style="display:block">Privacy</span>
+            <span style="display:block;padding-left:{{ indent1 }}">Policy</span>
+          </h1>
+          <p style="margin:clamp(24px,3vw,40px) 0 0;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;font-family:var(--font-heading);font-weight:800;color:rgba(0,0,0,0.55)">Last updated: [Placeholder Date]</p>
+        </div>
+      </section>
+
+
+      <section aria-label="Document body" style="border-bottom:1px solid rgba(0,0,0,0.25)">
+        <div style="max-width:1560px;margin:0 auto;padding:clamp(32px,4.5vw,72px) clamp(18px,3.5vw,56px) clamp(40px,5vw,88px)">
+          <div>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">01</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Information we collect</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We collect the information you give us directly: your name, email address and any details you include in a message or enquiry. When you buy a publication, we receive transaction details from our payment provider, such as the amount, the publication purchased and whether the payment succeeded.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">02</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">How we use information</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We use information to deliver purchased publications, provide support, respond to enquiries, keep records of transactions and improve our website and resources. We do not sell your information.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">03</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Payment information</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">Payments are processed by third-party payment providers such as Razorpay. Card and banking details are entered on the provider&rsquo;s secure systems. Trading Company does not collect or store payment card information.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">04</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Third-party services</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We rely on third parties for payment processing, hosting, email and analytics. These providers process information on our behalf under their own terms and privacy policies.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">05</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Analytics and cookies</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">Our website may use cookies and analytics tools to understand how pages are used and to improve them. You can manage or block cookies in your browser settings. Blocking them may affect how parts of the site work.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">06</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Communications</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We may email you about a purchase, a support request or an update to a publication you own. If we send occasional updates about new publications, every message includes a way to unsubscribe.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">07</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Data protection</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We take reasonable technical and organisational measures to protect the information we hold. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">08</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Sharing information</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We share information only with the service providers who help us operate the business, or where we are required to do so by law.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">09</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Changes to this policy</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">We may update this policy from time to time. The date at the top of this page shows when it was last revised.</p>
+              </div>
+            </article>
+            <article style="display:grid;grid-template-columns:{{ legalCols }};gap:clamp(14px,2.5vw,48px);padding:clamp(26px,3vw,40px) 0;border-top:1px solid rgba(0,0,0,0.25)">
+              <p class="tc-num" style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(30px,3.2vw,46px);line-height:0.8;letter-spacing:-0.04em">10</p>
+              <div style="max-width:68ch">
+                <h2 style="margin:0 0 14px;font-size:clamp(19px,2vw,26px);line-height:1.1;letter-spacing:-0.025em;text-transform:uppercase;color:#000000">Contact</h2>
+              <p style="margin:0 0 14px;font-size:17px;line-height:1.62;color:rgba(0,0,0,0.72);text-wrap:pretty">For any question about this policy or the information we hold, write to <a class="tc-link-u" href="mailto:support@tradingcompany.in" style="text-transform:none">support@tradingcompany.in</a>.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <nav aria-label="Legal pages" style="border-bottom:1px solid rgba(0,0,0,0.25)">
+        <div style="max-width:1560px;margin:0 auto;padding:clamp(24px,3vw,44px) clamp(18px,3.5vw,56px);display:flex;flex-wrap:wrap;gap:clamp(18px,3vw,44px)">
+          <a class="tc-link-u" href="Privacy.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase">Privacy</a>
+          <a class="tc-link-u" href="Terms.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase">Terms &amp; Conditions</a>
+          <a class="tc-link-u" href="Disclaimer.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase">Disclaimer</a>
+        </div>
+      </nav>
+
+    </main>
+
+    <footer style="background:#000000;color:#FFFFFF">
+      <div style="max-width:1560px;margin:0 auto;padding:clamp(40px,5vw,88px) clamp(18px,3.5vw,56px) clamp(24px,3vw,36px)">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:clamp(28px,3.5vw,56px);padding-bottom:clamp(36px,4.5vw,64px);border-bottom:1px solid rgba(255,255,255,0.35)">
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <img src="uploads/trading company footer.png" alt="Trading Company" style="height:54px;width:auto;align-self:flex-start;flex:0 0 auto">
+            <p style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#FFFFFF">Built for Traders.</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0 0 4px;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Navigate</p>
+            <a class="tc-link-u" href="index.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Home</a>
+            <a class="tc-link-u" href="Library.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Publications</a>
+            <a class="tc-link-u" href="About.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">About</a>
+            <a class="tc-link-u" href="Contact.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Contact</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0 0 4px;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Legal</p>
+            <a class="tc-link-u" href="Privacy.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Privacy</a>
+            <a class="tc-link-u" href="Terms.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Terms</a>
+            <a class="tc-link-u" href="Disclaimer.dc.html" style="align-self:flex-start;font-size:13px;letter-spacing:0.06em;text-transform:uppercase">Disclaimer</a>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <p style="margin:0 0 4px;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Support</p>
+            <a class="tc-link-u" href="mailto:support@tradingcompany.in" style="align-self:flex-start;font-size:13px;letter-spacing:0.02em">support@tradingcompany.in</a>
+            <p style="margin:0;font-size:12px;line-height:1.55;color:rgba(255,255,255,0.6)">tradingcompany.in</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;padding-top:22px">
+          <p style="margin:0;font-size:11px;letter-spacing:0.04em;color:rgba(255,255,255,0.55)">© 2026 Trading Company. All rights reserved.</p>
+          <p style="margin:0;font-size:11px;letter-spacing:0.04em;color:rgba(255,255,255,0.55)">Educational resources only. Not financial advice.</p>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { w: 1200, menuOpen: false, pct: 0 };
+
+  componentDidMount() {
+    this.sync = () => {
+      const w = window.innerWidth;
+      if (w !== this.state.w) this.setState({ w, menuOpen: w < 900 ? this.state.menuOpen : false });
+    };
+    this.onScroll = () => {
+      const doc = document.documentElement;
+      const max = (doc.scrollHeight - window.innerHeight) || 1;
+      const pct = Math.max(0, Math.min(100, Math.round((window.scrollY / max) * 100)));
+      if (pct !== this.state.pct) this.setState({ pct });
+    };
+    this.sync();
+    this.onScroll();
+    window.addEventListener('resize', this.sync);
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.sync);
+    window.removeEventListener('scroll', this.onScroll);
+  }
+
+  renderVals() {
+    const { w, menuOpen, pct } = this.state;
+    const narrow = w < 900;
+    const mid = w < 1240;
+    const spine = w >= 1240;
+    return {
+      desktopNav: narrow ? 'none' : 'flex',
+      burgerDisplay: narrow ? 'flex' : 'none',
+      mobileNav: narrow && menuOpen ? 'flex' : 'none',
+      menuOpenStr: menuOpen ? 'true' : 'false',
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+
+      // the spine is a desktop affordance; narrow viewports get a top progress hairline
+      spineDisplay: spine ? 'flex' : 'none',
+      barDisplay: spine ? 'none' : 'block',
+      shellPad: spine ? '72px' : '0px',
+      progressHeight: pct + '%',
+      progressWidth: pct + '%',
+      progressLabel: String(pct).padStart(2, '0') + '%',
+
+      tickDisplay: mid ? 'none' : 'block',
+      indent1: narrow ? '8%' : '14%',
+      indent2: narrow ? '16%' : '28%',
+      heroFootCols: narrow ? '1fr' : 'minmax(0,1.3fr) minmax(0,0.7fr)',
+      ctaWidth: narrow ? '100%' : 'auto',
+
+      // plate: numeral / cover / copy — numeral drops out on phones, cover leads
+      plateCols: narrow ? '1fr' : (mid ? 'auto minmax(0,0.34fr) minmax(0,1fr)' : 'auto minmax(0,0.3fr) minmax(0,1fr)'),
+      numSize: narrow ? '0px' : 'clamp(64px,7.5vw,128px)',
+      coverMax: narrow ? '58%' : '100%',
+
+      noteCols: mid ? '1fr' : 'minmax(0,0.85fr) minmax(0,1.15fr)',
+      practiceCols: narrow ? '1fr' : (mid ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))'),
+      setCols: narrow ? '1fr' : 'minmax(0,1.15fr) minmax(0,0.85fr)',
+      legalCols: narrow ? '1fr' : 'clamp(70px,7vw,120px) minmax(0,1fr)'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/modernist-209a40ca-926e-4959-aff6-5d88a299548b/styles.css">
+<script src="_ds/modernist-209a40ca-926e-4959-aff6-5d88a299548b/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<title>The Library | Trading Company</title>
+<meta name="description" content="The complete collection of Trading Company publications — practical frameworks on risk, behaviour, position sizing, systems and review.">
+<meta property="og:title" content="The Library | Trading Company">
+<meta property="og:description" content="Five publications on risk, behaviour, sizing, systems and review.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://tradingcompany.in/publications">
+<style>
+  :root {
+    --color-bg: #FFFFFF; --color-surface: #FFFFFF; --color-text: #000000;
+    --color-accent: #000000; --color-accent-2: #000000; --color-divider: #000000;
+    --color-accent-500: #000000; --color-accent-600: #000000; --color-accent-700: #000000;
+  }
+  body { margin: 0; background: #FFFFFF; color: #000000; -webkit-font-smoothing: antialiased; }
+  a { color: #000000; text-decoration: none; }
+  a:hover { color: #000000; text-decoration: underline; text-underline-offset: 4px; }
+  ::selection { background: #000000; color: #FFFFFF; }
+  :focus-visible { outline: 2px solid #000000; outline-offset: 3px; }
+  @keyframes tc-sheen { from { background-position: 0 0, 0 0; } to { background-position: 0 0, 200% 0; } }
+  .tc-silver {
+    border: 2px solid transparent;
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    background-size: auto, 200% 100%;
+    background-repeat: no-repeat;
+    background-image: linear-gradient(#000000,#000000), linear-gradient(115deg,#6e6e6e 0%,#ffffff 16%,#9d9d9d 30%,#ffffff 48%,#6b6b6b 64%,#f2f2f2 82%,#7a7a7a 100%);
+    animation: tc-sheen 7s linear infinite;
+    transition: color .2s ease;
+  }
+  .tc-silver:hover { background-image: linear-gradient(#ffffff,#ffffff), linear-gradient(115deg,#6e6e6e 0%,#ffffff 16%,#9d9d9d 30%,#ffffff 48%,#6b6b6b 64%,#f2f2f2 82%,#7a7a7a 100%); color: #000000 !important; }
+  @media (prefers-reduced-motion: reduce) { .tc-silver { animation: none; } }
+  .lb-rail { scrollbar-width: none; }
+  .lb-rail::-webkit-scrollbar { display: none; }
+  .lb-cv { transition: transform 520ms cubic-bezier(0.16,1,0.3,1), box-shadow 420ms ease; }
+  .lb-cv:hover { transform: translateY(-8px); box-shadow: 0 16px 34px rgba(0,0,0,0.16); }
+  @keyframes lb-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .lb-item { animation: lb-rise 620ms cubic-bezier(0.16,1,0.3,1) both; }
+  .lb-item:nth-child(2) { animation-delay: 70ms; }
+  .lb-item:nth-child(3) { animation-delay: 140ms; }
+  .lb-item:nth-child(4) { animation-delay: 210ms; }
+  .lb-item:nth-child(5) { animation-delay: 280ms; }
+  @media (prefers-reduced-motion: reduce) { .lb-item { animation: none; } .lb-cv { transition: none; } }
+</style>
+</helmet>
+
+<div style="background:#FFFFFF;color:#000000;font-family:var(--font-body);font-size:16px;line-height:1.55;overflow-x:hidden">
+
+  <header style="position:sticky;top:0;z-index:40;background:#FFFFFF;border-bottom:1px solid #000000">
+    <div style="max-width:1560px;margin:0 auto;padding:0 clamp(20px,4vw,56px);height:clamp(70px,6vw,84px);display:flex;align-items:center;justify-content:space-between;gap:24px">
+      <a href="index.html" aria-label="Trading Company — home" style="display:flex;align-items:center;flex:0 0 auto">
+        <img src="uploads/tradingcompany.png" alt="Trading Company" style="height:clamp(36px,3.6vw,46px);width:auto;display:block">
+      </a>
+      <nav aria-label="Primary" style="display:{{ desktopNav }};align-items:center;gap:clamp(22px,3vw,44px)">
+        <a href="index.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase">Home</a>
+        <a href="Library.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;text-decoration:underline;text-underline-offset:5px">Publications</a>
+        <a href="About.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase">About</a>
+        <a href="Contact.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.14em;text-transform:uppercase">Contact</a>
+      </nav>
+      <button type="button" aria-label="Menu" aria-expanded="{{ menuOpenStr }}" onClick="{{ toggleMenu }}" style="display:{{ burgerDisplay }};flex-direction:column;justify-content:center;align-items:center;gap:5px;width:44px;height:44px;padding:0;background:transparent;border:1px solid #000000;cursor:pointer">
+        <span style="display:block;width:18px;height:2px;background:#000000"></span>
+        <span style="display:block;width:18px;height:2px;background:#000000"></span>
+      </button>
+    </div>
+    <nav aria-label="Primary mobile" style="display:{{ mobileNav }};flex-direction:column;border-top:1px solid #000000;background:#FFFFFF">
+      <a href="index.html" style="padding:18px clamp(20px,4vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Home</a>
+      <a href="Library.dc.html" style="padding:18px clamp(20px,4vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Publications</a>
+      <a href="About.dc.html" style="padding:18px clamp(20px,4vw,56px);border-bottom:1px solid rgba(0,0,0,0.15);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">About</a>
+      <a href="Contact.dc.html" style="padding:18px clamp(20px,4vw,56px);font-family:var(--font-heading);font-weight:800;font-size:15px;letter-spacing:0.12em;text-transform:uppercase">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section aria-label="The Library" style="max-width:1560px;margin:0 auto;padding:clamp(48px,7vw,104px) clamp(20px,4vw,56px) clamp(40px,5vw,72px)">
+      <p style="margin:0 0 clamp(32px,5vw,64px);font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.18em;text-transform:uppercase">The collection — 01 / 05</p>
+      <h1 style="margin:0;font-size:clamp(52px,13vw,186px);line-height:0.86;letter-spacing:-0.045em;font-weight:800">The<br>Library.</h1>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(40px,6vw,76px);padding-top:clamp(24px,3vw,36px);border-top:2px solid #000000">
+        <p style="margin:0;font-size:clamp(17px,1.9vw,23px);line-height:1.42;letter-spacing:-0.01em;max-width:38ch;text-wrap:pretty">Five publications, developed as one body of work. Each is written to be applied — to a process, a position, a review.</p>
+        <p style="margin:0;font-size:15px;line-height:1.6;color:rgba(0,0,0,0.6);max-width:42ch;text-wrap:pretty">Digital publications. Instant access. Every purchase includes the chart theme templates.</p>
+      </div>
+    </section>
+
+    <section aria-label="Publications" style="max-width:1560px;margin:0 auto;padding:0 clamp(20px,4vw,56px) clamp(56px,7vw,112px)">
+
+      <div style="display:flex;flex-direction:column;gap:clamp(22px,2.6vw,34px);padding-top:clamp(28px,3.5vw,48px);border-top:1px solid #000000">
+
+        <div class="lb-rail" ref="{{ railRef }}" onScroll="{{ onRail }}" style="display:flex;gap:clamp(18px,2.4vw,40px);align-items:stretch;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px">
+          <article class="lb-item" style="flex:0 0 auto;width:min(72vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px" data-screen-label="Publication 01">
+            <a class="lb-cv" href="Publication-01-The-Risk-Framework.dc.html" style="position:relative;display:block;width:100%;aspect-ratio:1/1.414;border:1px solid #000000;background:#FFFFFF;overflow:hidden;text-decoration:none">
+              <image-slot id="tc-lib-cover-01" shape="rect" fit="cover" placeholder="Cover — Publication 01"></image-slot>
+              <span style="position:absolute;left:0;top:0;padding:7px 11px;background:#000000;color:#FFFFFF;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em">01</span>
+            </a>
+            <h3 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(20px,2.1vw,26px);line-height:1;letter-spacing:-0.03em;text-transform:uppercase"><a href="Publication-01-The-Risk-Framework.dc.html" style="color:#000000;text-decoration:none">The Risk Framework</a></h3>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:rgba(0,0,0,0.72);text-wrap:pretty">Capital protection and practical risk management for active traders.</p>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #000000">
+              <a href="Publication-01-The-Risk-Framework.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Explore →</a>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">₹399</span>
+            </div>
+          </article>
+          <article class="lb-item" style="flex:0 0 auto;width:min(72vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px" data-screen-label="Publication 02">
+            <a class="lb-cv" href="Publication-02-The-Traders-Mind.dc.html" style="position:relative;display:block;width:100%;aspect-ratio:1/1.414;border:1px solid #000000;background:#FFFFFF;overflow:hidden;text-decoration:none">
+              <image-slot id="tc-lib-cover-02" shape="rect" fit="cover" placeholder="Cover — Publication 02"></image-slot>
+              <span style="position:absolute;left:0;top:0;padding:7px 11px;background:#000000;color:#FFFFFF;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em">02</span>
+            </a>
+            <h3 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(20px,2.1vw,26px);line-height:1;letter-spacing:-0.03em;text-transform:uppercase"><a href="Publication-02-The-Traders-Mind.dc.html" style="color:#000000;text-decoration:none">The Trader’s Mind</a></h3>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:rgba(0,0,0,0.72);text-wrap:pretty">Understanding discipline, behaviour and decision-making in trading.</p>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #000000">
+              <a href="Publication-02-The-Traders-Mind.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Explore →</a>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">₹399</span>
+            </div>
+          </article>
+          <article class="lb-item" style="flex:0 0 auto;width:min(72vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px" data-screen-label="Publication 03">
+            <a class="lb-cv" href="Publication-03-Position-Sizing.dc.html" style="position:relative;display:block;width:100%;aspect-ratio:1/1.414;border:1px solid #000000;background:#FFFFFF;overflow:hidden;text-decoration:none">
+              <image-slot id="tc-lib-cover-03" shape="rect" fit="cover" placeholder="Cover — Publication 03"></image-slot>
+              <span style="position:absolute;left:0;top:0;padding:7px 11px;background:#000000;color:#FFFFFF;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em">03</span>
+            </a>
+            <h3 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(20px,2.1vw,26px);line-height:1;letter-spacing:-0.03em;text-transform:uppercase"><a href="Publication-03-Position-Sizing.dc.html" style="color:#000000;text-decoration:none">Position Sizing</a></h3>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:rgba(0,0,0,0.72);text-wrap:pretty">A practical framework for managing exposure and protecting trading capital.</p>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #000000">
+              <a href="Publication-03-Position-Sizing.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Explore →</a>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">₹399</span>
+            </div>
+          </article>
+          <article class="lb-item" style="flex:0 0 auto;width:min(72vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px" data-screen-label="Publication 04">
+            <a class="lb-cv" href="Publication-04-The-Trading-System.dc.html" style="position:relative;display:block;width:100%;aspect-ratio:1/1.414;border:1px solid #000000;background:#FFFFFF;overflow:hidden;text-decoration:none">
+              <image-slot id="tc-lib-cover-04" shape="rect" fit="cover" placeholder="Cover — Publication 04"></image-slot>
+              <span style="position:absolute;left:0;top:0;padding:7px 11px;background:#000000;color:#FFFFFF;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em">04</span>
+            </a>
+            <h3 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(20px,2.1vw,26px);line-height:1;letter-spacing:-0.03em;text-transform:uppercase"><a href="Publication-04-The-Trading-System.dc.html" style="color:#000000;text-decoration:none">The Trading System</a></h3>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:rgba(0,0,0,0.72);text-wrap:pretty">Creating structure around market decisions, execution and consistency.</p>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #000000">
+              <a href="Publication-04-The-Trading-System.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Explore →</a>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">₹399</span>
+            </div>
+          </article>
+          <article class="lb-item" style="flex:0 0 auto;width:min(72vw,300px);scroll-snap-align:start;display:flex;flex-direction:column;gap:16px" data-screen-label="Publication 05">
+            <a class="lb-cv" href="Publication-05-The-Review.dc.html" style="position:relative;display:block;width:100%;aspect-ratio:1/1.414;border:1px solid #000000;background:#FFFFFF;overflow:hidden;text-decoration:none">
+              <image-slot id="tc-lib-cover-05" shape="rect" fit="cover" placeholder="Cover — Publication 05"></image-slot>
+              <span style="position:absolute;left:0;top:0;padding:7px 11px;background:#000000;color:#FFFFFF;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em">05</span>
+            </a>
+            <h3 style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:clamp(20px,2.1vw,26px);line-height:1;letter-spacing:-0.03em;text-transform:uppercase"><a href="Publication-05-The-Review.dc.html" style="color:#000000;text-decoration:none">The Review</a></h3>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:rgba(0,0,0,0.72);text-wrap:pretty">A structured approach to reviewing trades, mistakes and decision-making.</p>
+            <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid #000000">
+              <a href="Publication-05-The-Review.dc.html" style="font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.14em;text-transform:uppercase">Explore →</a>
+              <span style="font-family:var(--font-heading);font-weight:800;font-size:14px">₹399</span>
+            </div>
+          </article>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:clamp(16px,2vw,28px)">
+          <div style="flex:1 1 220px;min-width:140px;height:2px;background:rgba(0,0,0,0.18)">
+            <div style="{{ railFill }}"></div>
+          </div>
+          <p style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(0,0,0,0.72)">Swipe the shelf</p>
+          <div style="display:flex;gap:10px">
+            <button type="button" aria-label="Scroll left" onClick="{{ railPrev }}" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#FFFFFF;color:#000000;border:1px solid #000000;cursor:pointer;font-size:15px" style-hover="background:#000000;color:#FFFFFF">←</button>
+            <button type="button" aria-label="Scroll right" onClick="{{ railNext }}" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:#000000;color:#FFFFFF;border:1px solid #000000;cursor:pointer;font-size:15px" style-hover="background:#FFFFFF;color:#000000">→</button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <section aria-label="The complete library bundle" style="border-top:2px solid #000000">
+      <div style="max-width:1560px;margin:0 auto;padding:clamp(40px,5.5vw,88px) clamp(20px,4vw,56px);display:grid;grid-template-columns:{{ bundleCols }};gap:clamp(28px,4vw,72px);align-items:center">
+        <div>
+          <p style="margin:0 0 18px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(0,0,0,0.55)">The complete collection</p>
+          <h2 style="margin:0 0 16px;font-size:clamp(28px,4vw,56px);line-height:1;letter-spacing:-0.035em;font-weight:800;text-transform:uppercase;max-width:18ch">All five publications</h2>
+          <p style="margin:0;font-size:17px;line-height:1.6;max-width:46ch;color:rgba(0,0,0,0.75);text-wrap:pretty">One purchase, the whole library — risk, behaviour, position sizing, systems and review, with the chart theme templates included.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:18px;border:2px solid #000000;padding:clamp(22px,3vw,34px)">
+          <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:14px">
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:clamp(34px,4vw,54px);letter-spacing:-0.03em">₹999</span>
+            <span style="font-size:17px;color:rgba(0,0,0,0.45);text-decoration:line-through">₹1,995</span>
+            <span style="margin-left:auto;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;background:#000000;color:#FFFFFF;padding:6px 10px">Save ₹996</span>
+          </div>
+          <a href="{{ bundleUrl }}" class="btn btn-primary tc-silver" style="width:100%;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;padding:20px 28px;color:#FFFFFF;text-decoration:none;justify-content:flex-start">Buy the bundle — ₹999</a>
+          <p style="margin:0;font-size:13px;line-height:1.5;color:rgba(0,0,0,0.6)">Instant digital access to all five publications.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Included with every publication" style="background:#000000;color:#FFFFFF">
+      <div style="max-width:1560px;margin:0 auto;padding:clamp(56px,7vw,112px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:clamp(32px,5vw,72px);align-items:center">
+        <div>
+          <p style="margin:0 0 24px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.6)">Included with every publication</p>
+          <h2 style="margin:0 0 20px;font-size:clamp(30px,4.2vw,58px);line-height:1;letter-spacing:-0.035em;font-weight:800;text-transform:uppercase;color:#FFFFFF">Free charts<br>theme templates</h2>
+          <p style="margin:0;font-size:16px;line-height:1.6;max-width:44ch;color:rgba(255,255,255,0.72);text-wrap:pretty">A collection of chart theme templates accompanies each publication, at no additional cost.</p>
+        </div>
+        <div style="position:relative;width:100%;aspect-ratio:16/10;border:1px solid rgba(255,255,255,0.4)">
+          <image-slot id="tc-lib-bonus" shape="rect" fit="cover" placeholder="Chart theme templates preview"></image-slot>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer style="background:#000000;color:#FFFFFF;border-top:1px solid rgba(255,255,255,0.25)">
+    <div style="max-width:1560px;margin:0 auto;padding:clamp(56px,7vw,104px) clamp(20px,4vw,56px) clamp(32px,4vw,48px)">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(36px,4vw,64px);padding-bottom:clamp(48px,6vw,80px);border-bottom:1px solid rgba(255,255,255,0.35)">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <img src="uploads/trading company footer.png" alt="Trading Company" style="height:62px;width:auto;align-self:flex-start;flex:0 0 auto">
+          <p style="margin:0;font-family:var(--font-heading);font-weight:800;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;color:#FFFFFF">Built for Traders.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <p style="margin:0 0 6px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Navigate</p>
+          <a href="index.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Home</a>
+          <a href="Library.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Publications</a>
+          <a href="About.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">About</a>
+          <a href="Contact.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Contact</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <p style="margin:0 0 6px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Legal</p>
+          <a href="Privacy.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Privacy</a>
+          <a href="Terms.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Terms</a>
+          <a href="Disclaimer.dc.html" style="font-size:14px;letter-spacing:0.06em;text-transform:uppercase;color:#FFFFFF">Disclaimer</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <p style="margin:0 0 6px;font-family:var(--font-heading);font-weight:800;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5)">Support</p>
+          <a href="mailto:support@tradingcompany.in" style="font-size:14px;letter-spacing:0.02em;color:#FFFFFF">support@tradingcompany.in</a>
+          <p style="margin:0;font-size:13px;line-height:1.55;color:rgba(255,255,255,0.6)">tradingcompany.in</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;padding-top:28px">
+        <p style="margin:0;font-size:12px;letter-spacing:0.04em;color:rgba(255,255,255,0.55)">© 2026 Trading Company. All rights reserved.</p>
+        <p style="margin:0;font-size:12px;letter-spacing:0.04em;color:rgba(255,255,255,0.55)">Educational resources only. Not financial advice.</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { narrow: false, menuOpen: false, bundleUrl: '', progress: 0 };
+
+  componentDidMount() {
+    this.sync = () => {
+      const narrow = window.innerWidth < 860;
+      if (narrow !== this.state.narrow) this.setState({ narrow, menuOpen: false });
+    };
+    this.sync();
+    window.addEventListener('resize', this.sync);
+    import('./site-config.js')
+      .then(cfg => this.setState({ bundleUrl: (cfg.payments || {}).bundlePaymentUrl || '' }))
+      .catch(() => {});
+  }
+
+  componentWillUnmount() { window.removeEventListener('resize', this.sync); }
+
+  railRef = (el) => { this.rail = el; };
+
+  onRail = () => {
+    const el = this.rail;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    const p = max > 0 ? Math.min(1, Math.max(0, el.scrollLeft / max)) : 0;
+    if (Math.abs(p - (this.state.progress || 0)) > 0.004) this.setState({ progress: p });
+  };
+
+  nudge(dir) {
+    const el = this.rail;
+    if (!el) return;
+    const item = el.firstElementChild;
+    const step = item ? item.getBoundingClientRect().width + 24 : el.clientWidth * 0.8;
+    const target = Math.max(0, Math.min(el.scrollWidth - el.clientWidth, el.scrollLeft + dir * step));
+    const from = el.scrollLeft, dist = target - from, t0 = performance.now();
+    cancelAnimationFrame(this.railAnim);
+    const tick = (now) => {
+      const k = Math.min(1, (now - t0) / 420);
+      el.scrollLeft = from + dist * (1 - Math.pow(1 - k, 3));
+      if (k < 1) this.railAnim = requestAnimationFrame(tick);
+    };
+    this.railAnim = requestAnimationFrame(tick);
+  }
+
+  renderVals() {
+    const { narrow, menuOpen, bundleUrl } = this.state;
+    return {
+      desktopNav: narrow ? 'none' : 'flex',
+      burgerDisplay: narrow ? 'flex' : 'none',
+      mobileNav: narrow && menuOpen ? 'flex' : 'none',
+      menuOpenStr: menuOpen ? 'true' : 'false',
+      bundleUrl: bundleUrl || '#',
+      bundleCols: narrow ? '1fr' : 'minmax(0,1.1fr) minmax(0,0.9fr)',
+      railRef: this.railRef,
+      onRail: this.onRail,
+      railPrev: () => this.nudge(-1),
+      railNext: () => this.nudge(1),
+      railFill: 'height:100%;background:#000000;transition:width 180ms linear;width:'
+        + Math.max(8, Math.round((this.state.progress || 0) * 100)) + '%',
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      closeMenu: () => this.setState({ menuOpen: false }),
+      // Alternating rows: on narrow screens the cover leads, on wide it trails.
+      textFirst: narrow ? 2 : 1,
+      imageSecond: narrow ? 1 : 2
+    };
+  }
+}
+</script>
+</body>
+</html>
