@@ -1,6 +1,6 @@
 // get-download-link — called by ThankYou.dc.html on page load.
 // In:  { order_id }            the orders.id uuid checkout.js put in the URL
-// Out: { verified: true, publication_id, publication_title, customer_email }
+// Out: { verified: true, publication_id, publication_title, customer_email, amount }
 //
 // The uuid is the only credential a buyer has, so this endpoint is deliberately
 // tight-lipped: an unpaid order, an unknown order and a malformed id all come
@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
     const db = adminClient();
     const { data: order, error } = await db
       .from('orders')
-      .select('id, status, publication_id, customer_email')
+      .select('id, status, publication_id, customer_email, amount')
       .eq('id', order_id.trim())
       .maybeSingle();
 
@@ -51,6 +51,10 @@ Deno.serve(async (req) => {
       publication_id: order.publication_id,
       publication_title: CATALOG[order.publication_id]?.title ?? null,
       customer_email: order.customer_email,
+      // Paise, straight from the row Razorpay was charged against. The Thank You
+      // page turns this into the Meta Purchase value, so it must come from the
+      // server — a client-side price could be edited to inflate ad reporting.
+      amount: order.amount,
       // TODO: wire to Supabase Storage once PDFs are uploaded —
       // download_url / bonus_url (short-lived signed urls) belong here.
     });

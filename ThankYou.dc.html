@@ -3,6 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1404201134463690');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1404201134463690&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <script src="./support.js"></script>
 </head>
 <body>
@@ -317,6 +334,9 @@ class Component extends DCLogic {
           title: typeof body.publication_title === 'string' ? body.publication_title : '',
           email: typeof body.customer_email === 'string' ? body.customer_email : ''
         });
+        // Only a server-confirmed 'paid' order reaches here, so this is the one
+        // place a Purchase may fire. The amount comes back in paise.
+        this.trackPurchase(orderId, body.amount);
         // TODO: wire to Supabase Storage once PDFs are uploaded — read
         // body.download_url / body.bonus_url here and hand them to the buttons.
         return;
@@ -326,6 +346,23 @@ class Component extends DCLogic {
       // Offline, blocked, function down — same neutral outcome, no detail leaked.
       console.error('order verification failed', e);
       if (this.alive) this.setState({ gate: 'unverified' });
+    }
+  }
+
+  // Reports the conversion to Meta. Never called on an unverified gate.
+  // eventID is the order uuid so a reloaded Thank You page is deduplicated
+  // rather than counted as a second sale.
+  trackPurchase(orderId, amountPaise) {
+    if (typeof window.fbq !== 'function') return;          // pixel blocked or still loading
+    if (!Number.isFinite(amountPaise) || amountPaise <= 0) return;
+    if (this.purchaseTracked) return;
+    this.purchaseTracked = true;
+    try {
+      window.fbq('track', 'Purchase',
+        { value: amountPaise / 100, currency: 'INR' },
+        { eventID: orderId });
+    } catch (e) {
+      console.error('purchase tracking failed', e);        // never block the download
     }
   }
 

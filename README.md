@@ -146,20 +146,45 @@ Storage once PDFs are uploaded`.
 ## 7. Contact form
 
 Front-end only. Connect the submit handler in `Contact.dc.html` to your form
-endpoint (a Hostinger PHP mail script or a form service).
+endpoint. Cloudflare Pages serves static files only — there is no PHP — so this
+has to be a form service or another Supabase Edge Function, not a mail script
+dropped next to the pages.
 
 ## 8. Legal review
 
 Have Privacy, Terms and Disclaimer reviewed by a qualified professional
 before launch. Nothing in this repo is legal advice.
 
-## 9. Deploying to Hostinger
+## 9. Deploying
 
-1. Upload the whole folder to `public_html` via hPanel File Manager or FTP.
-2. Keep the folder structure — `_ds/`, `uploads/`, `image-slot.js`,
-   `site-config.js`, `checkout.js` and `support.js` must sit beside the page
-   files. `checkout.js` is loaded as an ES module, so the pages must be served
-   over http(s), not opened as `file://`.
-3. Rename `index.html` to `index.html` (or add a redirect) so the domain
-   root loads it, and update the nav/footer links to match any renaming.
-4. Enable HTTPS in hPanel and set `tradingcompany.in` as the primary domain.
+The site is hosted on **Cloudflare Pages**, connected to the GitHub repository
+`juunyd/tradingcompany`. There is no manual upload step and no FTP: pushing to
+`main` is the deploy.
+
+```sh
+git add -A
+git commit -m "..."
+git push origin main
+```
+
+Cloudflare Pages watches the repo, picks up the new commit within a few seconds
+and rebuilds. There is no build command — the repo is served as-is from its
+root — so a deploy is really just a file sync, and it is usually live inside a
+minute. Watch it in the Cloudflare dashboard under **Workers & Pages → the
+project → Deployments**; each deploy is tied to its commit hash, and a bad one
+can be rolled back from that list without touching git.
+
+Notes:
+
+- Keep the folder structure. `_ds/`, `uploads/`, `image-slot.js`,
+  `site-config.js`, `checkout.js` and `support.js` must stay beside the page
+  files. `checkout.js` is loaded as an ES module, so the pages have to be served
+  over http(s) — opening one as `file://` will not work.
+- `index.html` is the domain root. If you rename it, update the nav and footer
+  links on every page to match.
+- HTTPS and the `tradingcompany.in` custom domain are configured once in the
+  Cloudflare dashboard (**the project → Custom domains**) and need no attention
+  per deploy.
+- The Supabase Edge Functions deploy on their own track — Cloudflare Pages does
+  not touch them. After changing anything under `supabase/functions/`, run
+  `supabase functions deploy <name>` as well as pushing.
