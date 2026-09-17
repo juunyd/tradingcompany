@@ -153,6 +153,16 @@ src="https://www.facebook.com/tr?id=1404201134463690&ev=PageView&noscript=1"
                 <a href="#buy" onClick="{{ buyNow }}" class="tc-silver" style="flex:{{ heroBtnFlex }};min-width:0;text-align:center;box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:19px 28px;color:#FFFFFF;text-decoration:none;display:block">Get this book — ₹199</a>
               </div>
               <p style="margin:0;font-size:12.5px;color:rgba(0,0,0,0.55)">Digital book · Instant access after payment · Secure checkout via Razorpay</p>
+              <div style="width:100%;box-sizing:border-box;margin-top:clamp(6px,1vw,14px);display:grid;grid-template-columns:{{ bonusCols }};gap:clamp(16px,2vw,28px);align-items:center;padding:clamp(16px,2vw,28px);border:2px solid #000000;background:#F5F5F5">
+                <!-- Bonus preview: save a 16:9 image as uploads/bonus/preview-3.jpg and it fills this frame. Blank until then. -->
+                <div role="img" aria-label="Preview of the chart colour templates" style="width:100%;aspect-ratio:16/9;box-sizing:border-box;border:1px solid rgba(0,0,0,0.2);background-color:#FFFFFF;background-image:url('uploads/bonus/preview-3.jpg');background-size:cover;background-position:center"></div>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-width:0">
+                  <span style="display:inline-block;font-family:var(--font-heading);font-weight:800;font-size:10px;line-height:1;letter-spacing:0.22em;text-transform:uppercase;padding:8px 12px;background:#000000;color:#FFFFFF">Free bonus</span>
+                  <h2 style="margin:0;font-size:clamp(18px,1.9vw,23px);line-height:1.2;letter-spacing:-0.02em;font-weight:800;text-transform:uppercase;color:#000000">15 chart colour templates</h2>
+                  <p style="margin:0;font-size:clamp(16px,1.4vw,18px);line-height:1.5;max-width:40ch;color:rgba(0,0,0,0.78);text-wrap:pretty">Ready-made candlestick colour schemes — every candle, background and text colour, in hex.</p>
+                  <p style="margin:0;padding-top:12px;border-top:1px solid rgba(0,0,0,0.25);align-self:stretch;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.6)">Included free with this book</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -179,21 +189,6 @@ src="https://www.facebook.com/tr?id=1404201134463690&ev=PageView&noscript=1"
             <div>
               <p style="margin:0 0 6px;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.55)">Digital delivery</p>
               <p style="margin:0;font-size:15px;line-height:1.5;max-width:32ch;color:rgba(0,0,0,0.78);text-wrap:pretty">Read it on a phone, tablet or desktop. Nothing ships.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section aria-label="Free bonus" style="border-bottom:1px solid rgba(0,0,0,0.25)">
-        <div style="max-width:1560px;margin:0 auto;padding:clamp(36px,4.5vw,72px) clamp(18px,3.5vw,56px)">
-          <div style="max-width:1080px;display:grid;grid-template-columns:{{ bonusCols }};gap:clamp(22px,3vw,48px);align-items:center;padding:clamp(18px,2.6vw,36px);border:2px solid #000000;background:#F5F5F5">
-            <!-- Bonus preview: save a 16:9 image as uploads/bonus/preview-3.jpg and it fills this frame. Blank until then. -->
-            <div role="img" aria-label="Preview of the chart colour templates" style="width:100%;aspect-ratio:16/9;box-sizing:border-box;border:1px solid rgba(0,0,0,0.2);background-color:#FFFFFF;background-image:url('uploads/bonus/preview-3.jpg');background-size:cover;background-position:center"></div>
-            <div style="display:flex;flex-direction:column;align-items:flex-start;gap:14px;min-width:0">
-              <span style="display:inline-block;font-family:var(--font-heading);font-weight:800;font-size:10px;line-height:1;letter-spacing:0.22em;text-transform:uppercase;padding:8px 12px;background:#000000;color:#FFFFFF">Free bonus</span>
-              <h2 style="margin:0;font-size:clamp(18px,1.9vw,23px);line-height:1.2;letter-spacing:-0.02em;font-weight:800;text-transform:uppercase;color:#000000">15 chart colour templates</h2>
-              <p style="margin:0;font-size:clamp(16px,1.4vw,18px);line-height:1.5;max-width:40ch;color:rgba(0,0,0,0.78);text-wrap:pretty">Ready-made candlestick colour schemes — every candle, background and text colour, in hex.</p>
-              <p style="margin:0;padding-top:12px;border-top:1px solid rgba(0,0,0,0.25);align-self:stretch;font-family:var(--font-heading);font-weight:800;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.6)">Included free with this book</p>
             </div>
           </div>
         </div>
@@ -471,8 +466,8 @@ class Component extends DCLogic {
       heroBtnFlex: narrow ? '1 1 0' : '0 0 auto',
       insideCols: narrow ? '1fr' : 'repeat(2,minmax(0,1fr))',
       practiceCols3: narrow ? '1fr' : 'repeat(3,minmax(0,1fr))',
-      // bonus card: image beside the copy on wider screens, stacked on top on phones
-      bonusCols: narrow ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)',
+      // bonus card sits in the hero column: image beside the copy on wide desktops, stacked above it otherwise
+      bonusCols: mid ? '1fr' : 'minmax(0,1fr) minmax(0,1fr)',
       receiveCols: narrow ? '1fr' : 'clamp(120px,14vw,190px) minmax(0,1fr)',
       stickyBar: narrow && scrolled ? 'flex' : 'none',
       stickySpacer: narrow ? '68px' : '0px',
