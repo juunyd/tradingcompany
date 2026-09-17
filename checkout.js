@@ -170,6 +170,97 @@ function emailDialog() {
   return api;
 }
 
+/* ── the confirmation overlay ────────────────────────────────────────────────
+   Razorpay's popup closes the moment the payment succeeds, but verify-payment
+   still has to run before the Thank You page can open. Without this the page
+   sits still for a few seconds and looks broken. It can never be dismissed
+   while confirming, and it never ends on a spinner with no explanation. */
+
+const STILL_CONFIRMING_MS = 8000;    // reassure
+const GIVE_UP_WAITING_MS = 25000;    // stop promising; the request keeps running
+
+function confirmingOverlay() {
+  if (!document.getElementById('tc-confirm-style')) {
+    const style = document.createElement('style');
+    style.id = 'tc-confirm-style';
+    style.textContent =
+      '@keyframes tc-confirm-spin{to{transform:rotate(360deg)}}' +
+      '.tc-confirm-spinner{animation:tc-confirm-spin .9s linear infinite}' +
+      '@media (prefers-reduced-motion: reduce){.tc-confirm-spinner{animation:none;border-top-color:#000000}}';
+    document.head.appendChild(style);
+  }
+
+  const overlay = document.createElement('div');
+  overlay.setAttribute('role', 'alertdialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-labelledby', 'tc-confirm-title');
+  overlay.setAttribute('aria-describedby', 'tc-confirm-text');
+  overlay.style.cssText =
+    'position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.72);' +
+    'display:flex;align-items:center;justify-content:center;padding:20px';
+
+  const panel = document.createElement('div');
+  panel.style.cssText =
+    'background:#FFFFFF;color:#000000;border:2px solid #000000;max-width:440px;width:100%;' +
+    'padding:clamp(28px,4vw,40px);box-sizing:border-box';
+
+  panel.innerHTML =
+    '<div id="tc-confirm-spinner" class="tc-confirm-spinner" aria-hidden="true" style="width:30px;height:30px;' +
+      'box-sizing:border-box;border:2px solid #000000;border-top-color:transparent;border-radius:50%;margin:0 0 24px"></div>' +
+    '<h2 id="tc-confirm-title" style="margin:0 0 10px;font-family:' + FONT_H + ';font-weight:800;font-size:15px;' +
+      'letter-spacing:0.16em;text-transform:uppercase"></h2>' +
+    '<p id="tc-confirm-text" aria-live="polite" style="margin:0;font-size:15px;line-height:1.6;color:rgba(0,0,0,0.72)"></p>' +
+    '<div id="tc-confirm-actions" style="display:none;gap:12px;margin-top:24px;flex-wrap:wrap"></div>';
+
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+
+  const scrollLock = document.body.style.overflow;
+  document.body.style.overflow = 'hidden';
+
+  const title = panel.querySelector('#tc-confirm-title');
+  const text = panel.querySelector('#tc-confirm-text');
+  const spinner = panel.querySelector('#tc-confirm-spinner');
+  const actions = panel.querySelector('#tc-confirm-actions');
+
+  const btn = (primary) =>
+    'font-family:' + FONT_H + ';font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;' +
+    'padding:17px 24px;min-height:52px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;' +
+    'border:2px solid #000000;box-sizing:border-box;' +
+    (primary ? 'background:#000000;color:#FFFFFF;flex:1 1 200px' : 'background:transparent;color:#000000;flex:0 0 auto');
+
+  const api = {
+    show(heading, message) {
+      title.textContent = heading;
+      text.textContent = message;
+    },
+    // The dead end, done properly: stop the spinner, say what to do, let them close it.
+    fail(heading, message, supportHref, onClose) {
+      spinner.style.display = 'none';
+      api.show(heading, message);
+      actions.innerHTML = '';
+      const mail = document.createElement('a');
+      mail.href = supportHref;
+      mail.textContent = 'Email support';
+      mail.style.cssText = btn(true);
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.textContent = 'Close';
+      close.style.cssText = btn(false);
+      close.addEventListener('click', () => { api.remove(); if (onClose) onClose(); });
+      actions.append(mail, close);
+      actions.style.display = 'flex';
+      mail.focus();
+    },
+    remove() {
+      document.body.style.overflow = scrollLock;
+      overlay.remove();
+    }
+  };
+  api.show('Confirming your payment…', 'This takes a few seconds. Please keep this page open.');
+  return api;
+}
+
 /* ── public entry point ───────────────────────────────────────────────────── */
 
 let inFlight = false;
@@ -203,37 +294,64 @@ export function startCheckout(publicationId) {
         theme: { color: '#000000' },
 
         handler: async (response) => {
+          // Up before anything else runs, so there is never a still, silent page.
+          const overlay = confirmingOverlay();
+          const paymentRef = response.razorpay_payment_id || '';
+          const support = cfg.supportEmail || 'support@tradingcompany.in';
+          const supportHref = 'mailto:' + support + '?subject=' +
+            encodeURIComponent('Payment not confirmed' + (paymentRef ? ' — ' + paymentRef : '')) +
+            '&body=' + encodeURIComponent(
+              'Book: ' + order.publication_title + '\nPayment ID: ' + paymentRef +
+              '\nOrder: ' + response.razorpay_order_id + '\n');
+          const failed = () => overlay.fail(
+            'We could not confirm it here',
+            'If money has left your account, your purchase is safe — nothing is lost. ' +
+            'Email ' + support + ' with your payment ID' + (paymentRef ? ' (' + paymentRef + ')' : '') +
+            ' and we will send your book straight away.',
+            supportHref,
+            () => { inFlight = false; }
+          );
+
+          let settled = false;
+          const slow = setTimeout(() => {
+            if (!settled) overlay.show('Still confirming…', 'This can take a few extra seconds. Please keep this page open.');
+          }, STILL_CONFIRMING_MS);
+          // The request is not cancelled: if it succeeds after this, we still redirect.
+          const tooSlow = setTimeout(() => { if (!settled) failed(); }, GIVE_UP_WAITING_MS);
+
           try {
             const result = await callFunction('verify-payment', {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature
             });
+            settled = true;
+            clearTimeout(slow); clearTimeout(tooSlow);
             if (result.success) {
+              overlay.show('Payment confirmed', 'Opening your download page…');
               const q = new URLSearchParams({
                 order_id: result.order_id,
                 publication: publicationId
               });
               window.location.href = thankYou + '?' + q.toString();
-              return;                    // navigating away
+              return;                    // navigating away; the overlay stays up until it does
             }
-            notify(
-              'We could not verify that payment automatically. If money has left your account, ' +
-              'email us and we will sort it out straight away — nothing is lost.'
-            );
+            failed();
           } catch (e) {
-            notify('Payment verification failed: ' + e.message);
+            settled = true;
+            clearTimeout(slow); clearTimeout(tooSlow);
+            console.error('verify-payment failed', e);
+            failed();
           }
-          inFlight = false;
         },
 
         modal: { ondismiss: () => { inFlight = false; } }   // buyer closed the popup
       });
 
+      // Razorpay shows the failure inside its own popup and lets the buyer retry
+      // there, so nothing to draw here; ondismiss frees the button when they leave.
       rzp.on('payment.failed', (e) => {
-        const d = (e && e.error) || {};
-        notify('Payment failed: ' + (d.description || 'the bank declined it') + '. You have not been charged.');
-        inFlight = false;
+        console.warn('payment failed', (e && e.error) || e);
       });
 
       dialog.close();                    // hand over to Razorpay's own popup
