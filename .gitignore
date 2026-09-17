@@ -8,3 +8,8 @@ Thumbs.db
 .idea/
 .vscode/
 
+
+# Paid book files. They are served only through signed Storage URLs;
+# committing them would publish them free on the live site.
+uploads/pdfs/
+*.pdf

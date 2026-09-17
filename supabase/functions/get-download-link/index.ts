@@ -1,18 +1,29 @@
 // get-download-link — called by ThankYou.dc.html on page load.
 // In:  { order_id }            the orders.id uuid checkout.js put in the URL
-// Out: { verified: true, publication_id, publication_title, customer_email, amount }
+// Out: { verified: true, publication_id, publication_title, customer_email, amount,
+//        download_url, download_expires_at }
 //
 // The uuid is the only credential a buyer has, so this endpoint is deliberately
 // tight-lipped: an unpaid order, an unknown order and a malformed id all come
 // back as the same refusal, so nobody can probe the table for valid ids.
 //
-// TODO: wire to Supabase Storage once the PDFs are uploaded — on the verified
-// branch below, call db.storage.from('publications').createSignedUrl(path, ttl)
-// and return the signed url alongside the fields we already send. One order
-// is always one book — there is no bundle to fan out into several files.
+// Delivery: each book lives in the private `publications` bucket at
+// `<publication_id>.pdf`. Every call signs a fresh url, so the order page (the
+// link in the confirmation email) never hands out a dead one — reloading it is
+// how a buyer gets a new link after the old one expires.
 import { CATALOG } from '../_shared/catalog.ts';
 import { json, preflight } from '../_shared/http.ts';
 import { adminClient } from '../_shared/db.ts';
+
+// One hour: long enough to download on a slow connection, short enough that a
+// forwarded link stops working soon after.
+const LINK_TTL_SECONDS = 60 * 60;
+
+// Windows refuses these in file names; "Should I Quit Trading?" has one.
+function downloadName(title: string) {
+  // …and a trailing full stop ("Now What.") would give "Now What..pdf".
+  return title.replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim().replace(/\.+$/, '') + '.pdf';
+}
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -46,18 +57,33 @@ Deno.serve(async (req) => {
 
     if (!order || order.status !== 'paid') return json(REFUSED, 404);
 
+    const title = CATALOG[order.publication_id]?.title ?? null;
+
+    // A signing failure (say, a missing file) must not hide a paid order: the
+    // page still confirms the purchase and tells the buyer to retry or write in.
+    const { data: signed, error: signError } = await db.storage
+      .from('publications')
+      .createSignedUrl(`${order.publication_id}.pdf`, LINK_TTL_SECONDS, {
+        download: downloadName(title ?? order.publication_id),
+      });
+    if (signError || !signed?.signedUrl) {
+      console.error('signing download failed', order.publication_id, signError);
+    }
+
     return json({
       verified: true,
       order_id: order.id,
       publication_id: order.publication_id,
-      publication_title: CATALOG[order.publication_id]?.title ?? null,
+      publication_title: title,
       customer_email: order.customer_email,
       // Paise, straight from the row Razorpay was charged against. The Thank You
       // page turns this into the Meta Purchase value, so it must come from the
       // server — a client-side price could be edited to inflate ad reporting.
       amount: order.amount,
-      // TODO: wire to Supabase Storage once PDFs are uploaded —
-      // download_url (a short-lived signed url) belongs here.
+      download_url: signed?.signedUrl ?? null,
+      download_expires_at: signed?.signedUrl
+        ? new Date(Date.now() + LINK_TTL_SECONDS * 1000).toISOString()
+        : null,
     });
   } catch (e) {
     console.error('get-download-link failed', e);

@@ -94,56 +94,49 @@ The buyer journey closes automatically: page → Buy → email → Razorpay popu
 `site-config.js` → `supportEmail`, plus the `mailto:support@tradingcompany.in`
 links in each page footer and on the Contact page.
 
-## 6. Secure download delivery (in progress)
-
-### What is built
+## 6. Secure download delivery
 
 `ThankYou.dc.html` is **gated**. On load it reads `order_id` from the URL and
-POSTs it to a fourth Edge Function, `get-download-link`, which looks the order
-up with the service_role key and answers only:
+POSTs it to the `get-download-link` Edge Function, which looks the order up with
+the service_role key and answers only:
 
 | Order state | Response |
 | --- | --- |
-| `status = 'paid'` | `200 { verified: true, publication_id, publication_title, customer_email }` |
+| `status = 'paid'` | `200 { verified: true, publication_id, publication_title, customer_email, amount, download_url, download_expires_at }` |
 | unpaid / unknown / malformed id | `404 { verified: false, error: 'We could not verify this order.' }` |
 
 The three failures share one wording on purpose — the page must never confirm
-whether an `order_id` exists, or it becomes a probe oracle. A network failure
-lands on the same neutral branch, because the page must not show a purchase it
-could not confirm. Only a `verified: true` answer reveals the purchase content.
+whether an `order_id` exists, or it becomes a probe oracle.
 
-A private Storage bucket, `publications`, exists and is **empty**. It has no
-policies on `storage.objects`, so only the Edge Functions can reach it.
+### The files
 
-### What is not built yet
+The books live in the private Storage bucket `publications`, one file per
+product id: `lost-money-fo.pdf`, `revenge-trading-cure.pdf`,
+`should-i-quit-trading.pdf`, `comeback-plan.pdf`. The bucket has no policies,
+so only the Edge Functions can read it. **Never commit the PDFs** — the repo is
+the live site, so a committed PDF is a free public download. `uploads/pdfs/`
+and `*.pdf` are gitignored for that reason.
 
-`DOWNLOAD_ROUTE` in `ThankYou.dc.html` is still empty, and
-`get-download-link` returns no URLs — the PDFs do not exist yet. The button
-falls back to a support mailto carrying the order reference, so no real buyer
-dead-ends. Every spot that needs wiring is marked `TODO: wire to Supabase
-Storage once PDFs are uploaded`.
+To replace a book:
 
-### Finishing it, once the PDFs exist
+```bash
+supabase storage cp "./uploads/pdfs/<file>.pdf" ss:///publications/<product-id>.pdf \
+  --experimental --content-type application/pdf
+```
 
-1. Upload into the private bucket, keyed by publication id:
+(Use an absolute path; the CLI resolves relative paths from the project root.)
 
-   ```bash
-   supabase storage cp ./lost-money-fo.pdf ss:///publications/lost-money-fo.pdf --experimental
-   # …and the other three
-   ```
+### The link
 
-2. In `get-download-link`, on the verified branch, sign them and return the URLs:
+On a paid order, `get-download-link` signs a URL valid for **one hour**, with a
+`download` filename built from the catalog title. Every call signs a fresh one:
 
-   ```ts
-   const { data } = await db.storage.from('publications')
-     .createSignedUrl(`${order.publication_id}.pdf`, 900);   // 15 minutes
-   ```
-
-3. Redeploy: `supabase functions deploy get-download-link`.
-
-4. In `ThankYou.dc.html`, read `body.download_url` in `verify()` into state,
-   and return it from `renderVals()` as `downloadUrl` in place of the mailto
-   fallback.
+- Reloading the Thank You page, or opening the link in the confirmation email
+  (which points at the Thank You page, not at the file), always gives a live link.
+- If the page has been left open and the link has under five minutes left, the
+  download button fetches a new one before following it.
+- If signing fails (for example a missing file), the purchase is still
+  confirmed and the page tells the buyer to reload or write to support.
 
 ## 7. Contact form
 
