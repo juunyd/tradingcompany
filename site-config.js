@@ -14,8 +14,8 @@
       The Razorpay SECRET key lives only in Supabase Edge Function secrets.
    2. PRICES — display strings (e.g. "₹399"). Also update catalog.ts.
    3. SUPPORT EMAIL — `supportEmail`; used in footers and contact copy.
-   4. TITLES / SUBTITLES / COVER IMAGES — these live in each publication's own
-      page file (Publication-01-*.dc.html …).
+   4. TITLES / SUBTITLES / COVER IMAGES — these live in each book's own
+      page file (Book-01-*.dc.html …).
    ───────────────────────────────────────────────────────────────────────────── */
 
 export const supportEmail = 'support@tradingcompany.in';
@@ -29,21 +29,17 @@ export const supabase = {
 };
 
 /* Publication ids — these must match the keys in
-   supabase/functions/_shared/catalog.ts exactly. */
+   supabase/functions/_shared/catalog.ts exactly. Each book is sold on its own. */
 export const publications = {
-  riskFramework:  'risk-framework',
-  tradersMind:    'traders-mind',
-  positionSizing: 'position-sizing',
-  tradingSystem:  'trading-system',
-  review:         'review',
-  bundle:         'bundle'
+  lostMoneyFO:        'lost-money-fo',
+  revengeTradingCure: 'revenge-trading-cure',
+  shouldIQuitTrading: 'should-i-quit-trading',
+  comebackPlan:       'comeback-plan'
 };
 
 export const prices = {
-  riskFramework: '₹399',
-  tradersMind: '₹399',
-  positionSizing: '₹399',
-  tradingSystem: '₹399',
-  review: '₹399',
-  bundle: '₹999'
+  lostMoneyFO: '₹399',
+  revengeTradingCure: '₹399',
+  shouldIQuitTrading: '₹399',
+  comebackPlan: '₹399'
 };

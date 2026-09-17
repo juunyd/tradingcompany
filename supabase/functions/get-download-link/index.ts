@@ -8,7 +8,8 @@
 //
 // TODO: wire to Supabase Storage once the PDFs are uploaded — on the verified
 // branch below, call db.storage.from('publications').createSignedUrl(path, ttl)
-// and return the signed url alongside the fields we already send.
+// and return the signed url alongside the fields we already send. One order
+// is always one book — there is no bundle to fan out into several files.
 import { CATALOG } from '../_shared/catalog.ts';
 import { json, preflight } from '../_shared/http.ts';
 import { adminClient } from '../_shared/db.ts';
@@ -56,7 +57,7 @@ Deno.serve(async (req) => {
       // server — a client-side price could be edited to inflate ad reporting.
       amount: order.amount,
       // TODO: wire to Supabase Storage once PDFs are uploaded —
-      // download_url / bonus_url (short-lived signed urls) belong here.
+      // download_url (a short-lived signed url) belongs here.
     });
   } catch (e) {
     console.error('get-download-link failed', e);

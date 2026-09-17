@@ -1,12 +1,11 @@
 // The authoritative price list. The browser sends only a publication id —
 // never an amount — so a tampered client cannot buy a ₹399 book for ₹1.
+// The four-book recovery series. Each book is sold on its own; there is no bundle.
 export const CATALOG: Record<string, { title: string; amount: number }> = {
-  'risk-framework':  { title: 'The Risk Framework',  amount: 39900 },
-  'traders-mind':    { title: "The Trader's Mind",   amount: 39900 },
-  'position-sizing': { title: 'Position Sizing',     amount: 39900 },
-  'trading-system':  { title: 'The Trading System',  amount: 39900 },
-  'review':          { title: 'The Review',          amount: 39900 },
-  'bundle':          { title: 'All five publications', amount: 99900 },
+  'lost-money-fo':         { title: 'I Lost Money in F&O. Now What.',        amount: 39900 },
+  'revenge-trading-cure':  { title: 'The Revenge Trading Cure',              amount: 39900 },
+  'should-i-quit-trading': { title: 'Should I Quit Trading? An Honest Test', amount: 39900 },
+  'comeback-plan':         { title: 'The Comeback Plan',                     amount: 39900 },
 };
 
 export const CURRENCY = 'INR';

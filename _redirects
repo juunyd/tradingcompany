@@ -1,0 +1,13 @@
+# The five demo publications were retired for the four-book recovery series.
+# Old links (ads, shares, bookmarks) land on the series page instead of a 404.
+# Both spellings, because Cloudflare Pages also serves pages without ".html".
+/Publication-01-The-Risk-Framework.dc.html   /Library.dc.html  301
+/Publication-01-The-Risk-Framework.dc        /Library.dc.html  301
+/Publication-02-The-Traders-Mind.dc.html     /Library.dc.html  301
+/Publication-02-The-Traders-Mind.dc          /Library.dc.html  301
+/Publication-03-Position-Sizing.dc.html      /Library.dc.html  301
+/Publication-03-Position-Sizing.dc           /Library.dc.html  301
+/Publication-04-The-Trading-System.dc.html   /Library.dc.html  301
+/Publication-04-The-Trading-System.dc        /Library.dc.html  301
+/Publication-05-The-Review.dc.html           /Library.dc.html  301
+/Publication-05-The-Review.dc                /Library.dc.html  301

@@ -1,18 +1,17 @@
 # Trading Company — site guide
 
-All 11 pages are self-contained files in this folder. No build step, no WordPress.
+All 12 pages are self-contained files in this folder. No build step, no WordPress.
 
 ## Pages
 
 | Page | File |
 | --- | --- |
 | Homepage | `index.html` |
-| The Library | `Library.dc.html` |
-| Publication 01 — The Risk Framework | `Publication-01-The-Risk-Framework.dc.html` |
-| Publication 02 — The Trader's Mind | `Publication-02-The-Traders-Mind.dc.html` |
-| Publication 03 — Position Sizing | `Publication-03-Position-Sizing.dc.html` |
-| Publication 04 — The Trading System | `Publication-04-The-Trading-System.dc.html` |
-| Publication 05 — The Review | `Publication-05-The-Review.dc.html` |
+| The Series (nav: "Publications") | `Library.dc.html` |
+| Book One — I Lost Money in F&O. Now What. | `Book-01-I-Lost-Money-in-FO.dc.html` |
+| Book Two — The Revenge Trading Cure | `Book-02-The-Revenge-Trading-Cure.dc.html` |
+| Book Three — Should I Quit Trading? An Honest Test | `Book-03-Should-I-Quit-Trading.dc.html` |
+| Book Four — The Comeback Plan | `Book-04-The-Comeback-Plan.dc.html` |
 | About | `About.dc.html` |
 | Contact | `Contact.dc.html` |
 | Privacy Policy | `Privacy.dc.html` |
@@ -20,29 +19,34 @@ All 11 pages are self-contained files in this folder. No build step, no WordPres
 | Disclaimer | `Disclaimer.dc.html` |
 | Thank You (post-payment) | `ThankYou.dc.html` |
 
-## 1. Publication titles, subtitles, descriptions
+The four books are one series, read in order, each sold on its own. There is
+no bundle and no bonus download. Old `Publication-0N-*` URLs from the retired
+demo catalogue are 301-redirected to the series page by `_redirects`.
 
-Edit the text directly in that publication's file (or click into it in the
-editor). Each title appears in three places within the file: the `<title>` tag,
-the hero `<h1>`, and the mid-page CTA band. The same title/subtitle also appears
-on `index.html` and `Library.dc.html` — update those two as well.
+## 1. Book titles, subtitles, descriptions
+
+Edit the text directly in that book's file (or click into it in the editor).
+Each title appears in the `<title>` tag, the hero `<h1>`, the "Get the book"
+band and the next/previous links on the neighbouring book pages. The same
+title/subtitle also appears on `index.html`, `Library.dc.html`, in
+`NEXT_BOOK` in `ThankYou.dc.html`, and in `catalog.ts` (the name on the
+Razorpay popup and the confirmation email) — update all of them.
 
 ## 2. Publication cover images
 
 Covers are drop-in slots — drag an image onto the placeholder in the editor and
 it stays. Slot ids:
 
-- Homepage: `tc-cover-01` … `tc-cover-05`
-- Library: `tc-lib-cover-01` … `tc-lib-cover-05`
-- Publication pages: `tc-p01-cover` … `tc-p05-cover`
-- Chart-theme previews: `tc-pNN-bonus-mini` (hero card), `tc-pNN-bonus`
-  (purchase section), `tc-lib-bonus` (Library)
+- Homepage: `tcc-book-01` … `tcc-book-04`
+- Series page: `tc-lib-book-01` … `tc-lib-book-04`
+- Book pages: `tcc-b01-cover` … `tcc-b04-cover`
+- Sample pages on each book page: `tcc-bNN-preview-01` … `-04`
 
 ## 3. Prices
 
 `site-config.js` → `prices`. The displayed `₹399` strings also appear in each
-publication file (hero, details table, CTA band, purchase section) and on the
-Homepage / Library cards — search for `₹399` and replace.
+book file (hero, purchase band, sticky mobile bar) and on the
+Homepage / Series page rows — search for `₹399` and replace.
 
 ## 4. Payments — Razorpay Checkout + Supabase
 
@@ -61,8 +65,8 @@ browser only ever sends a publication id, so a tampered page cannot change the
 amount it is charged. The `prices` in `site-config.js` are display strings —
 change both together.
 
-Publication ids: `risk-framework`, `traders-mind`, `position-sizing`,
-`trading-system`, `review`, `bundle`.
+Publication ids: `lost-money-fo`, `revenge-trading-cure`,
+`should-i-quit-trading`, `comeback-plan`.
 
 The Razorpay **secret key never reaches the browser**. It is stored as a Supabase
 Edge Function secret (`RAZORPAY_KEY_SECRET`); the public key id is handed to the
@@ -113,9 +117,9 @@ policies on `storage.objects`, so only the Edge Functions can reach it.
 
 ### What is not built yet
 
-`DOWNLOAD_ROUTE` and `BONUS_ROUTE` in `ThankYou.dc.html` are still empty, and
-`get-download-link` returns no URLs — the PDFs do not exist yet. The buttons
-fall back to a support mailto carrying the order reference, so no real buyer
+`DOWNLOAD_ROUTE` in `ThankYou.dc.html` is still empty, and
+`get-download-link` returns no URLs — the PDFs do not exist yet. The button
+falls back to a support mailto carrying the order reference, so no real buyer
 dead-ends. Every spot that needs wiring is marked `TODO: wire to Supabase
 Storage once PDFs are uploaded`.
 
@@ -124,8 +128,8 @@ Storage once PDFs are uploaded`.
 1. Upload into the private bucket, keyed by publication id:
 
    ```bash
-   supabase storage cp ./risk-framework.pdf ss:///publications/risk-framework.pdf --experimental
-   # …and the other four, plus chart-themes.zip for the bonus
+   supabase storage cp ./lost-money-fo.pdf ss:///publications/lost-money-fo.pdf --experimental
+   # …and the other three
    ```
 
 2. In `get-download-link`, on the verified branch, sign them and return the URLs:
@@ -135,13 +139,11 @@ Storage once PDFs are uploaded`.
      .createSignedUrl(`${order.publication_id}.pdf`, 900);   // 15 minutes
    ```
 
-   `bundle` is the one special case: it needs five signed URLs, not one.
-
 3. Redeploy: `supabase functions deploy get-download-link`.
 
-4. In `ThankYou.dc.html`, read `body.download_url` / `body.bonus_url` in
-   `verify()` into state, and return them from `renderVals()` as `downloadUrl`
-   and `bonusUrl` in place of the mailto fallback.
+4. In `ThankYou.dc.html`, read `body.download_url` in `verify()` into state,
+   and return it from `renderVals()` as `downloadUrl` in place of the mailto
+   fallback.
 
 ## 7. Contact form
 
@@ -185,6 +187,10 @@ Notes:
 - HTTPS and the `tradingcompany.in` custom domain are configured once in the
   Cloudflare dashboard (**the project → Custom domains**) and need no attention
   per deploy.
+- **When the catalogue changes, deploy the functions and push together.**
+  The pages send publication ids that the deployed `create-order` must know,
+  so run `supabase functions deploy …` immediately before `git push`, or new
+  pages will get "Unknown publication" at checkout.
 - The Supabase Edge Functions deploy on their own track — Cloudflare Pages does
   not touch them. After changing anything under `supabase/functions/`, run
   `supabase functions deploy <name>` as well as pushing.

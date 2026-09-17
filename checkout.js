@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    TRADING COMPANY — RAZORPAY CHECKOUT
-   Shared by all five publication pages and the Library bundle button.
+   Shared by the four book pages.
 
    Flow:  Buy now → ask for email → create-order (Supabase) → Razorpay popup
           → verify-payment (Supabase) → ThankYou.dc.html?order_id=…
