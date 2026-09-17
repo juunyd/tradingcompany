@@ -12,7 +12,7 @@
    1. SUPABASE — url + anon key of the project holding the Edge Functions.
       The anon key is a public, publishable key; it is safe in this file.
       The Razorpay SECRET key lives only in Supabase Edge Function secrets.
-   2. PRICES — display strings (e.g. "₹399"). Also update catalog.ts.
+   2. PRICES — display strings (e.g. "₹199"). Also update catalog.ts.
    3. SUPPORT EMAIL — `supportEmail`; used in footers and contact copy.
    4. TITLES / SUBTITLES / COVER IMAGES — these live in each book's own
       page file (Book-01-*.dc.html …).
@@ -38,8 +38,8 @@ export const publications = {
 };
 
 export const prices = {
-  lostMoneyFO: '₹399',
-  revengeTradingCure: '₹399',
-  shouldIQuitTrading: '₹399',
-  comebackPlan: '₹399'
+  lostMoneyFO: '₹199',
+  revengeTradingCure: '₹199',
+  shouldIQuitTrading: '₹199',
+  comebackPlan: '₹199'
 };

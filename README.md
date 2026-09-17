@@ -44,9 +44,9 @@ it stays. Slot ids:
 
 ## 3. Prices
 
-`site-config.js` → `prices`. The displayed `₹399` strings also appear in each
+`site-config.js` → `prices`. The displayed `₹199` strings also appear in each
 book file (hero, purchase band, sticky mobile bar) and on the
-Homepage / Series page rows — search for `₹399` and replace.
+Homepage / Series page rows — search for `₹199` and replace.
 
 ## 4. Payments — Razorpay Checkout + Supabase
 

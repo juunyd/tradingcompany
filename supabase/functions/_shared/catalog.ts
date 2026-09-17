@@ -1,11 +1,11 @@
 // The authoritative price list. The browser sends only a publication id —
-// never an amount — so a tampered client cannot buy a ₹399 book for ₹1.
+// never an amount — so a tampered client cannot buy a ₹199 book for ₹1.
 // The four-book recovery series. Each book is sold on its own; there is no bundle.
 export const CATALOG: Record<string, { title: string; amount: number }> = {
-  'lost-money-fo':         { title: 'I Lost Money in F&O. Now What.',        amount: 39900 },
-  'revenge-trading-cure':  { title: 'The Revenge Trading Cure',              amount: 39900 },
-  'should-i-quit-trading': { title: 'Should I Quit Trading? An Honest Test', amount: 39900 },
-  'comeback-plan':         { title: 'The Comeback Plan',                     amount: 39900 },
+  'lost-money-fo':         { title: 'I Lost Money in F&O. Now What.',        amount: 19900 },
+  'revenge-trading-cure':  { title: 'The Revenge Trading Cure',              amount: 19900 },
+  'should-i-quit-trading': { title: 'Should I Quit Trading? An Honest Test', amount: 19900 },
+  'comeback-plan':         { title: 'The Comeback Plan',                     amount: 19900 },
 };
 
 export const CURRENCY = 'INR';
