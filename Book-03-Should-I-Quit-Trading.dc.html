@@ -153,9 +153,9 @@ src="https://www.facebook.com/tr?id=1404201134463690&ev=PageView&noscript=1"
               </div>
               <h1 style="margin:0;font-size:clamp(34px,5.4vw,80px);line-height:0.9;letter-spacing:-0.045em;font-weight:800;text-transform:uppercase">Should I Quit<br>Trading?<br>An Honest Test</h1>
               <p style="margin:0;font-size:clamp(16px,1.6vw,20px);line-height:1.45;max-width:42ch;color:rgba(0,0,0,0.78);text-wrap:pretty">A structured, honest way to answer the question — not motivation, not discouragement.</p>
-              <div style="width:100%;display:flex;flex-direction:{{ ctaDir }};flex-wrap:wrap;align-items:{{ ctaAlign }};gap:{{ ctaGap }};margin-top:4px;padding-top:clamp(16px,2vw,24px);border-top:1px solid rgba(0,0,0,0.35)">
+              <div style="width:100%;display:flex;flex-direction:{{ ctaDir }};flex-wrap:nowrap;align-items:{{ ctaAlign }};gap:{{ ctaGap }};margin-top:4px;padding-top:clamp(16px,2vw,24px);border-top:1px solid rgba(0,0,0,0.35)">
                 <span style="font-family:var(--font-heading);font-weight:800;font-size:clamp(28px,3vw,42px);letter-spacing:-0.025em">₹399</span>
-                <a href="#buy" onClick="{{ buyNow }}" class="tc-silver" style="width:{{ ctaWidth }};box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:19px 28px;color:#FFFFFF;text-decoration:none;display:block">Buy now — ₹399</a>
+                <a href="#buy" onClick="{{ buyNow }}" class="tc-silver" style="flex:{{ heroBtnFlex }};min-width:0;text-align:center;box-sizing:border-box;font-family:var(--font-heading);font-weight:800;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;padding:19px 28px;color:#FFFFFF;text-decoration:none;display:block">Download</a>
               </div>
               <p style="margin:0;font-size:12.5px;color:rgba(0,0,0,0.55)">Digital book · Instant access after payment · Secure checkout via Razorpay</p>
             </div>
@@ -489,9 +489,11 @@ class Component extends DCLogic {
       practiceCols: narrow ? '1fr' : (mid ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))'),
       heroCols: narrow ? '1fr' : 'minmax(0,0.72fr) minmax(0,1.28fr)',
       coverMaxW: narrow ? '58%' : '100%',
-      ctaDir: narrow ? 'column' : 'row',
-      ctaAlign: narrow ? 'stretch' : 'center',
+      // price and button share one row at every width; on phones the button takes the rest of it
+      ctaDir: 'row',
+      ctaAlign: 'center',
       ctaGap: narrow ? '14px' : '22px',
+      heroBtnFlex: narrow ? '1 1 0' : '0 0 auto',
       insideCols: narrow ? '1fr' : 'repeat(2,minmax(0,1fr))',
       practiceCols3: narrow ? '1fr' : 'repeat(3,minmax(0,1fr))',
       previewCols: narrow ? 'repeat(2,minmax(0,1fr))' : 'repeat(4,minmax(0,1fr))',
