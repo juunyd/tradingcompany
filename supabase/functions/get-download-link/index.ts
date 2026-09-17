@@ -1,7 +1,7 @@
 // get-download-link — called by ThankYou.dc.html on page load.
 // In:  { order_id }            the orders.id uuid checkout.js put in the URL
 // Out: { verified: true, publication_id, publication_title, customer_email, amount,
-//        download_url, download_expires_at }
+//        download_url, download_expires_at, bonus_title, bonus_url, bonus_expires_at }
 //
 // The uuid is the only credential a buyer has, so this endpoint is deliberately
 // tight-lipped: an unpaid order, an unknown order and a malformed id all come
@@ -11,6 +11,9 @@
 // `<publication_id>.pdf`. Every call signs a fresh url, so the order page (the
 // link in the confirmation email) never hands out a dead one — reloading it is
 // how a buyer gets a new link after the old one expires.
+//
+// Bonus: every book comes with the same chart colour templates PDF, stored once
+// in the same bucket at BONUS_PATH and signed alongside the book on every call.
 import { CATALOG } from '../_shared/catalog.ts';
 import { json, preflight } from '../_shared/http.ts';
 import { adminClient } from '../_shared/db.ts';
@@ -18,6 +21,10 @@ import { adminClient } from '../_shared/db.ts';
 // One hour: long enough to download on a slow connection, short enough that a
 // forwarded link stops working soon after.
 const LINK_TTL_SECONDS = 60 * 60;
+
+// One bonus for all four books.
+const BONUS_PATH = 'bonus-chart-color-templates.pdf';
+const BONUS_TITLE = '15 Chart Colour Templates';
 
 // Windows refuses these in file names; "Should I Quit Trading?" has one.
 function downloadName(title: string) {
@@ -61,14 +68,23 @@ Deno.serve(async (req) => {
 
     // A signing failure (say, a missing file) must not hide a paid order: the
     // page still confirms the purchase and tells the buyer to retry or write in.
-    const { data: signed, error: signError } = await db.storage
-      .from('publications')
-      .createSignedUrl(`${order.publication_id}.pdf`, LINK_TTL_SECONDS, {
+    const bucket = db.storage.from('publications');
+    const [book, bonus] = await Promise.all([
+      bucket.createSignedUrl(`${order.publication_id}.pdf`, LINK_TTL_SECONDS, {
         download: downloadName(title ?? order.publication_id),
-      });
-    if (signError || !signed?.signedUrl) {
-      console.error('signing download failed', order.publication_id, signError);
+      }),
+      bucket.createSignedUrl(BONUS_PATH, LINK_TTL_SECONDS, {
+        download: downloadName(BONUS_TITLE),
+      }),
+    ]);
+    const signed = book.data;
+    if (book.error || !signed?.signedUrl) {
+      console.error('signing download failed', order.publication_id, book.error);
     }
+    if (bonus.error || !bonus.data?.signedUrl) {
+      console.error('signing bonus failed', BONUS_PATH, bonus.error);
+    }
+    const expiresAt = new Date(Date.now() + LINK_TTL_SECONDS * 1000).toISOString();
 
     return json({
       verified: true,
@@ -81,9 +97,10 @@ Deno.serve(async (req) => {
       // server — a client-side price could be edited to inflate ad reporting.
       amount: order.amount,
       download_url: signed?.signedUrl ?? null,
-      download_expires_at: signed?.signedUrl
-        ? new Date(Date.now() + LINK_TTL_SECONDS * 1000).toISOString()
-        : null,
+      download_expires_at: signed?.signedUrl ? expiresAt : null,
+      bonus_title: BONUS_TITLE,
+      bonus_url: bonus.data?.signedUrl ?? null,
+      bonus_expires_at: bonus.data?.signedUrl ? expiresAt : null,
     });
   } catch (e) {
     console.error('get-download-link failed', e);

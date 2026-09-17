@@ -20,7 +20,8 @@ All 12 pages are self-contained files in this folder. No build step, no WordPres
 | Thank You (post-payment) | `ThankYou.dc.html` |
 
 The four books are one series, read in order, each sold on its own. There is
-no bundle and no bonus download. Old `Publication-0N-*` URLs from the retired
+no bundle. Every book comes with the same free bonus, 15 chart colour
+templates (see §6). Old `Publication-0N-*` URLs from the retired
 demo catalogue are 301-redirected to the series page by `_redirects`.
 
 ## 1. Book titles, subtitles, descriptions
@@ -102,7 +103,7 @@ the service_role key and answers only:
 
 | Order state | Response |
 | --- | --- |
-| `status = 'paid'` | `200 { verified: true, publication_id, publication_title, customer_email, amount, download_url, download_expires_at }` |
+| `status = 'paid'` | `200 { verified: true, publication_id, publication_title, customer_email, amount, download_url, download_expires_at, bonus_title, bonus_url, bonus_expires_at }` |
 | unpaid / unknown / malformed id | `404 { verified: false, error: 'We could not verify this order.' }` |
 
 The three failures share one wording on purpose — the page must never confirm
@@ -112,7 +113,12 @@ whether an `order_id` exists, or it becomes a probe oracle.
 
 The books live in the private Storage bucket `publications`, one file per
 product id: `lost-money-fo.pdf`, `revenge-trading-cure.pdf`,
-`should-i-quit-trading.pdf`, `comeback-plan.pdf`. The bucket has no policies,
+`should-i-quit-trading.pdf`, `comeback-plan.pdf`. The bonus is one shared file,
+`bonus-chart-color-templates.pdf` (source: `uploads/bonus/bonus.pdf`), signed
+alongside the book on every paid order and returned as `bonus_url` /
+`bonus_expires_at`. Its preview image on the book pages is
+`uploads/bonus/preview-N.jpg` (N = book number); until that file exists the
+card shows a "Bonus preview" placeholder. The bucket has no policies,
 so only the Edge Functions can read it. **Never commit the PDFs** — the repo is
 the live site, so a committed PDF is a free public download. `uploads/pdfs/`
 and `*.pdf` are gitignored for that reason.
