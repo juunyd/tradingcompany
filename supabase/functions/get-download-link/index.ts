@@ -1,6 +1,6 @@
 // get-download-link — called by ThankYou.dc.html on page load.
 // In:  { order_id }            the orders.id uuid checkout.js put in the URL
-// Out: { verified: true, publication_id, publication_title, customer_email, amount,
+// Out: { verified: true, publication_id, publication_title, customer_email, amount, payment_id,
 //        download_url, download_expires_at, bonus_title, bonus_url, bonus_expires_at }
 //
 // The uuid is the only credential a buyer has, so this endpoint is deliberately
@@ -51,7 +51,7 @@ Deno.serve(async (req) => {
     const db = adminClient();
     const { data: order, error } = await db
       .from('orders')
-      .select('id, status, publication_id, customer_email, amount')
+      .select('id, status, publication_id, customer_email, amount, razorpay_payment_id')
       .eq('id', order_id.trim())
       .maybeSingle();
 
@@ -96,6 +96,8 @@ Deno.serve(async (req) => {
       // page turns this into the Meta Purchase value, so it must come from the
       // server — a client-side price could be edited to inflate ad reporting.
       amount: order.amount,
+      // The Meta dedup key: the pixel's eventID must equal the CAPI event_id.
+      payment_id: order.razorpay_payment_id,
       download_url: signed?.signedUrl ?? null,
       download_expires_at: signed?.signedUrl ? expiresAt : null,
       bonus_title: BONUS_TITLE,

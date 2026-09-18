@@ -51,6 +51,13 @@ async function callFunction(name, payload) {
   return body;
 }
 
+// The Meta pixel's first-party cookies. Sent with the order so the server-side
+// Purchase can be matched to the ad click; absent if the pixel was blocked.
+function cookie(name) {
+  const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
+
 /* ── the email step ──────────────────────────────────────────────────────────
    Razorpay collects an email of its own, but we need one BEFORE the order
    exists so the row in `orders` can be traced back to a buyer. Built in plain
@@ -277,7 +284,13 @@ export function startCheckout(publicationId) {
     try {
       const [Razorpay, order, cfg] = await Promise.all([
         loadRazorpay(),
-        callFunction('create-order', { publication_id: publicationId, customer_email: email }),
+        callFunction('create-order', {
+          publication_id: publicationId,
+          customer_email: email,
+          fbp: cookie('_fbp'),
+          fbc: cookie('_fbc'),
+          event_source_url: window.location.href
+        }),
         config()
       ]);
 

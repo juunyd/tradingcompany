@@ -1,17 +1,19 @@
 // create-order — called by the Buy button before Razorpay Checkout opens.
-// In:  { publication_id, customer_email }
+// In:  { publication_id, customer_email, fbp?, fbc?, event_source_url? }
 // Out: { order_id, amount, currency, key_id, publication_title, db_order_id }
 import { isEmail, lookup, CURRENCY } from '../_shared/catalog.ts';
 import { corsHeaders, json, preflight } from '../_shared/http.ts';
 import { createRazorpayOrder, credentials } from '../_shared/razorpay.ts';
 import { adminClient } from '../_shared/db.ts';
+import { clientContext } from '../_shared/meta.ts';
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return preflight();
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
 
   try {
-    const { publication_id, customer_email } = await req.json().catch(() => ({}));
+    const body = await req.json().catch(() => ({}));
+    const { publication_id, customer_email } = body;
 
     const item = lookup(publication_id);
     if (!item) return json({ error: 'Unknown publication' }, 400);
@@ -36,7 +38,10 @@ Deno.serve(async (req) => {
         customer_email: email,
         razorpay_order_id: rzpOrder.id,
         status: 'created',
-        amount: item.amount,
+        // What Razorpay will actually charge; the Meta Purchase value comes from here.
+        amount: rzpOrder.amount,
+        // Kept for the Meta Purchase, which the webhook may send with no browser present.
+        ...clientContext(req, body),
       })
       .select('id')
       .single();
@@ -50,7 +55,7 @@ Deno.serve(async (req) => {
       JSON.stringify({
         order_id: rzpOrder.id,
         db_order_id: data.id,
-        amount: item.amount,
+        amount: rzpOrder.amount,
         currency: CURRENCY,
         key_id: keyId,
         publication_title: item.title,

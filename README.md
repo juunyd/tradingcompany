@@ -144,6 +144,32 @@ On a paid order, `get-download-link` signs a URL valid for **one hour**, with a
 - If signing fails (for example a missing file), the purchase is still
   confirmed and the page tells the buyer to reload or write to support.
 
+## 6a. Meta Purchase tracking (pixel + Conversions API)
+
+Each sale is reported to Meta twice, and Meta deduplicates the two into one:
+
+| Side | Where | `event_id` / `eventID` |
+| --- | --- | --- |
+| Server (CAPI) | `_shared/meta.ts`, called by `verify-payment` and `razorpay-webhook` (claimed, so sent once) | `razorpay_payment_id` |
+| Browser (pixel) | `trackPurchase` in `ThankYou.dc.html` | `razorpay_payment_id` (from `get-download-link`) |
+
+The value is the order's `amount` in paise ÷ 100, taken from the server, never
+from the browser. An event with a value that is not a number above zero is
+logged and not sent. `create-order` stores the buyer's IP, user agent, `_fbp`,
+`_fbc` and page URL on the order row, so the webhook can still send a
+well-matched event after the buyer closes the tab.
+
+Secrets (the pixel id in the page `<head>` is public by design; the token is not):
+
+```bash
+supabase secrets set META_PIXEL_ID=1404201134463690 META_ACCESS_TOKEN=<token>
+supabase secrets set META_TEST_EVENT_CODE=TEST12345   # only while testing
+supabase secrets unset META_TEST_EVENT_CODE           # when done
+```
+
+If `META_PIXEL_ID` or `META_ACCESS_TOKEN` is unset, the CAPI send is skipped with
+a warning and checkout carries on as normal.
+
 ## 7. Contact form
 
 Front-end only. Connect the submit handler in `Contact.dc.html` to your form

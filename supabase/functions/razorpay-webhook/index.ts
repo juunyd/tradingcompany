@@ -7,6 +7,7 @@
 import { hmacHex, safeEqual } from '../_shared/razorpay.ts';
 import { adminClient } from '../_shared/db.ts';
 import { sendOrderConfirmationOnce } from '../_shared/email.ts';
+import { sendMetaPurchaseOnce } from '../_shared/meta.ts';
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') {
@@ -77,11 +78,15 @@ Deno.serve(async (req) => {
   }
 
   // This is the path that catches the buyer who closed the tab before
-  // verify-payment could run. Claimed, so whichever endpoint arrives first
+  // verify-payment could run — for the receipt and for the Meta Purchase.
+  // Both are claimed, so whichever endpoint arrives first
   // sends and the other is a no-op. A failure here must NOT 500: Razorpay
   // would retry the whole event and re-settle an order that is already fine.
   if (status === 'paid' || existing.status === 'paid') {
-    await sendOrderConfirmationOnce(db, existing.id);
+    await Promise.all([
+      sendOrderConfirmationOnce(db, existing.id),
+      sendMetaPurchaseOnce(db, existing.id),
+    ]);
   }
 
   return new Response(

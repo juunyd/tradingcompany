@@ -367,7 +367,7 @@ class Component extends DCLogic {
         });
         // Only a server-confirmed 'paid' order reaches here, so this is the one
         // place a Purchase may fire. The amount comes back in paise.
-        this.trackPurchase(orderId, body.amount);
+        this.trackPurchase(body.payment_id, body.amount, body.publication_id);
         return;
       }
       this.setState({ gate: 'unverified' });
@@ -407,17 +407,26 @@ class Component extends DCLogic {
   onBonusDownload = (e) => this.followLink(e, 'bonus');
 
   // Reports the conversion to Meta. Never called on an unverified gate.
-  // eventID is the order uuid so a reloaded Thank You page is deduplicated
-  // rather than counted as a second sale.
-  trackPurchase(orderId, amountPaise) {
+  // eventID is the Razorpay payment id, the same event_id the server sends to
+  // the Conversions API, so Meta counts the pixel and CAPI events (and any
+  // reload of this page) as one sale.
+  trackPurchase(paymentId, amountPaise, publicationId) {
     if (typeof window.fbq !== 'function') return;          // pixel blocked or still loading
-    if (!Number.isFinite(amountPaise) || amountPaise <= 0) return;
+    const value = Number(amountPaise) / 100;
+    if (!Number.isFinite(value) || value <= 0) {
+      console.error('purchase not tracked: invalid value', amountPaise);
+      return;
+    }
+    if (typeof paymentId !== 'string' || !paymentId) {
+      console.error('purchase not tracked: no payment id to dedupe on');
+      return;
+    }
     if (this.purchaseTracked) return;
     this.purchaseTracked = true;
     try {
       window.fbq('track', 'Purchase',
-        { value: amountPaise / 100, currency: 'INR' },
-        { eventID: orderId });
+        { value, currency: 'INR', content_ids: [publicationId], content_type: 'product' },
+        { eventID: paymentId });
     } catch (e) {
       console.error('purchase tracking failed', e);        // never block the download
     }
